@@ -54,18 +54,17 @@ colors:
 
 # Mermaid Theme Configuration
 # ===========================
-# Copy this init block into your Mermaid diagrams for consistent styling:
-#
-# ```{mermaid}
-# %%{init: {'theme': 'base', 'themeVariables': {
-#   'primaryColor': '#2563eb',
-#   'primaryTextColor': '#ffffff',
-#   'primaryBorderColor': '#1d4ed8',
-#   'secondaryColor': '#7c3aed',
-#   'tertiaryColor': '#f1f5f9',
-#   'lineColor': '#64748b',
-#   'textColor': '#1e293b'
-# }}}%%
-# flowchart LR
-#   A --> B
-# ```
+# This init block is automatically prepended to diagrams by render-diagrams script.
+# Run: uv run render-diagrams
+
+mermaid_init: |
+  %%{init: {'theme': 'base', 'themeVariables': {
+    'primaryColor': '#2563eb',
+    'primaryTextColor': '#ffffff',
+    'primaryBorderColor': '#1d4ed8',
+    'secondaryColor': '#7c3aed',
+    'tertiaryColor': '#f1f5f9',
+    'lineColor': '#64748b',
+    'textColor': '#1e293b',
+    'background': '#ffffff'
+  }}}%%
