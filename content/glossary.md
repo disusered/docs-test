@@ -11,9 +11,6 @@ This glossary provides definitions for key terms used throughout the XBOL docume
 API
 : Application Programming Interface. A set of protocols and tools for building software applications.
 
-OdaSoft
-: The software development company responsible for the XBOL system development.
-
 XBOL
 : The primary system documented in this technical reference. See architecture section for detailed specifications.
 
@@ -25,9 +22,11 @@ XBOL System
 
 :::{tip}
 To add new terms, use this format inside the glossary directive:
+
 ```
 TermName
 : Definition of the term.
 ```
+
 Reference terms in other documents using `` {term}`XBOL` ``.
 :::
