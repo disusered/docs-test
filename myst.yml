@@ -10,10 +10,8 @@ project:
     - technical documentation
     - architecture
     - system design
-  authors:
-    - name: OdaSoft Development Team
-      email: dev@odasoft.com
-  github: https://github.com/odasoft/xbol-documents
+  authors: []
+  github:
   toc:
     - file: content/index.md
     - title: Glossary

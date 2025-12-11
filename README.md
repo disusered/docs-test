@@ -37,6 +37,14 @@ appendices/           # Supplementary material
 
 ### Mermaid Diagrams
 
+Use literal include to add an external mermaid diagram:
+
+```markdown
+```{literalinclude} /path/to/your/diagram.mmd
+  :language: mermaid
+```
+```
+
 Use the standard theme for consistent styling:
 
 ````markdown
@@ -52,8 +60,7 @@ Use the standard theme for consistent styling:
 }}}%%
 flowchart LR
   A[Component] --> B[Component]
-```
-````
+`````
 
 ### Glossary Terms
 
@@ -106,3 +113,18 @@ Build output goes to `_build/` (gitignored).
 
 - Python 3.11+
 - [uv](https://github.com/astral-sh/uv) package manager
+
+# TODO
+
+- [x] Hide author in documents
+- [x] Hide edit/github button in documents
+- [ ] Mermaid background color vis a vis dark mode
+- [ ] Mermaid zoom/open in new tab
+- [ ] Glossary terms
+  - [ ] Gateway
+  - [ ] Payments
+  - [ ] Notifications
+  - [ ] Ticketing
+  - [ ] Identity
+- [ ] Github Actions publish to pages <https://jupyterbook.org/stable/get-started/publish/>
+- [ ] Export to PDF
