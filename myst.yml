@@ -1,0 +1,15 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: ca58691d-cfc3-4cd2-8ba9-a95161b89868
+  # title:
+  # description:
+  # keywords: []
+  # authors: []
+  github: https://github.com/odasoft/xbol-documents
+  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+site:
+  template: book-theme
+  # options:
+  #   favicon: favicon.ico
+  #   logo: site_logo.png
