@@ -53,3 +53,8 @@ thead th {
 .admonition.error {
   border-left-color: var(--xbol-error);
 }
+
+/* Hide theme switcher button(s) */
+button.myst-theme-button {
+  display: none !important;
+}
