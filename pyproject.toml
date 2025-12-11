@@ -1,0 +1,7 @@
+[project]
+name = "xbol-documents"
+version = "0.1.0"
+description = "Documentation for the XBOL project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["ipykernel>=7.1.0"]
