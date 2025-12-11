@@ -1,15 +1,34 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
+
 project:
   id: ca58691d-cfc3-4cd2-8ba9-a95161b89868
-  # title:
-  # description:
-  # keywords: []
-  # authors: []
+  title: XBOL Technical Documentation
+  description: Technical documentation for the XBOL system including architecture, database design, and integration specifications.
+  keywords:
+    - XBOL
+    - technical documentation
+    - architecture
+    - system design
+  authors:
+    - name: OdaSoft Development Team
+      email: dev@odasoft.com
   github: https://github.com/odasoft/xbol-documents
-  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+  toc:
+    - file: content/index.md
+    - title: Glossary
+      file: content/glossary.md
+    - title: Architecture
+      children:
+        - pattern: content/architecture/*.md
+    - title: Appendices
+      children:
+        - pattern: content/appendices/*.md
+
 site:
   template: book-theme
-  # options:
-  #   favicon: favicon.ico
-  #   logo: site_logo.png
+  options:
+    hide_toc: false
+    style: _static/custom.css
+  # favicon: favicon.ico
+  # logo: site_logo.png

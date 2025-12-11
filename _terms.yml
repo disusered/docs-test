@@ -1,0 +1,71 @@
+# XBOL Documentation - Reviewable Terms & Style Guide
+# =====================================================
+# This file documents terms and styles used throughout the documentation.
+# For bulk changes: use find/replace across content/ directory.
+#
+# NOTE: mystmd does not support variable substitution (see issue #852).
+# This file serves as a central reference for reviewers and contributors.
+
+terms:
+  # Project identifiers
+  PROJECT_NAME: "XBOL"
+  SYSTEM_NAME: "XBOL System"
+  COMPANY_NAME: "OdaSoft"
+
+  # Document metadata
+  DOCUMENT_TITLE: "XBOL Technical Documentation"
+
+  # Add more reviewable terms as needed
+  # Example:
+  # DATABASE_NAME: "xbol_production"
+  # API_VERSION: "v2"
+
+# Color Palette
+# =============
+# Use these colors consistently across Mermaid diagrams, tables, and highlights.
+# Colors are chosen for accessibility and professional appearance.
+
+colors:
+  # Primary palette
+  primary: "#2563eb"        # Blue - main accent, links, primary actions
+  secondary: "#7c3aed"      # Purple - secondary elements
+  accent: "#0891b2"         # Cyan - highlights, callouts
+
+  # Status colors
+  success: "#16a34a"        # Green - success states, approved
+  warning: "#ca8a04"        # Yellow/Amber - warnings, pending
+  error: "#dc2626"          # Red - errors, critical
+  info: "#0284c7"           # Light blue - informational
+
+  # Neutral palette
+  dark: "#1e293b"           # Slate dark - headers, emphasis
+  medium: "#64748b"         # Slate medium - secondary text
+  light: "#f1f5f9"          # Slate light - backgrounds
+
+  # Mermaid-specific (hex without #)
+  mermaid:
+    primary: "2563eb"
+    primaryText: "ffffff"
+    secondary: "7c3aed"
+    secondaryText: "ffffff"
+    accent: "0891b2"
+    background: "f8fafc"
+    border: "e2e8f0"
+
+# Mermaid Theme Configuration
+# ===========================
+# Copy this init block into your Mermaid diagrams for consistent styling:
+#
+# ```{mermaid}
+# %%{init: {'theme': 'base', 'themeVariables': {
+#   'primaryColor': '#2563eb',
+#   'primaryTextColor': '#ffffff',
+#   'primaryBorderColor': '#1d4ed8',
+#   'secondaryColor': '#7c3aed',
+#   'tertiaryColor': '#f1f5f9',
+#   'lineColor': '#64748b',
+#   'textColor': '#1e293b'
+# }}}%%
+# flowchart LR
+#   A --> B
+# ```
