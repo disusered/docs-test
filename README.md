@@ -40,6 +40,7 @@ uv run render-diagrams context      # Render specific diagram
 ### Creating a diagram
 
 1. Create `diagrams/mydiagram.mmd`:
+
    ```mermaid
    flowchart LR
      A[Service A] --> B[Service B]
@@ -49,24 +50,29 @@ uv run render-diagrams context      # Render specific diagram
 2. Render: `uv run render-diagrams mydiagram`
 
 3. Reference in markdown:
-   ```markdown
+
+   ````markdown
    ```{figure} /diagrams/mydiagram.svg
    :name: fig-mydiagram
    :width: 100%
 
    Caption text - [View full size](/diagrams/mydiagram.svg)
    ```
+   ````
+
+   ```
+
    ```
 
 Theme is auto-injected from `_terms.yml`. Commit both `.mmd` and `.svg` files.
 
 ## Configuration
 
-| File                 | Purpose                               |
-| -------------------- | ------------------------------------- |
-| `myst.yml`           | Project metadata, TOC, site options   |
-| `_terms.yml`         | Terminology reference, diagram theme  |
-| `_static/custom.css` | Custom styling                        |
+| File                 | Purpose                              |
+| -------------------- | ------------------------------------ |
+| `myst.yml`           | Project metadata, TOC, site options  |
+| `_terms.yml`         | Terminology reference, diagram theme |
+| `_static/custom.css` | Custom styling                       |
 
 ## Requirements
 
@@ -78,3 +84,4 @@ Theme is auto-injected from `_terms.yml`. Commit both `.mmd` and `.svg` files.
 - [ ] Glossary terms (Gateway, Payments, Notifications, Ticketing, Identity)
 - [ ] GitHub Actions publish to pages
 - [ ] PDF
+- [ ] Add abstract and summary <https://mystmd.org/guide/document-parts>
