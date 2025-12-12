@@ -5,10 +5,12 @@ graph LR
         box_office[Box Office]
         customer[Customer]
         gate_staff[Gate Staff]
+        ticket_holder[Ticket Holder]
     end
 
     browser[Browser]
     device[Mobile Device]
+    ticket[Ticket]
     domain_name[Domain Name]
 
     subgraph platform[XBOL Platform]
@@ -43,7 +45,7 @@ graph LR
 
         subgraph onprem[On-Premise]
             bastion[Bastion]
-            handheld[Handheld]
+            handheld[Client Handheld]
         end
     end
 
@@ -69,6 +71,10 @@ graph LR
     %% Gate staff use the handheld app
     gate_staff --> device
     device --> handheld
+
+    %% Ticket holders present tickets (QR, printed, RFID) for scanning
+    ticket_holder --> ticket
+    ticket -->|Scan| handheld
 
     %% The handheld connects to the local bastion for offline functionality
     handheld -->|Local| bastion
@@ -108,8 +114,9 @@ graph LR
     %% The Identity API may rely on an external database or provider
     api_identity --> identity_provider
 
-    %% The Ticketing API relies on a seating service like seats.io
-    api_ticketing --> seating_service
+    %% The Gateway APIs manage seat inventory via seats.io
+    api_admin --> seating_service
+    api_client --> seating_service
 
     %% The Payment API relies on a payment processor
     api_payments --> payment_gateway
@@ -131,12 +138,12 @@ graph LR
     classDef deviceStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
     classDef externalStyle fill:#E8E8E8,stroke:#E8E8E8,color:#333
 
-    class customer,admin_staff,box_office,gate_staff userStyle
+    class customer,admin_staff,box_office,gate_staff,ticket_holder userStyle
     class admin_portal,handheld,client_web,client_mobile clientStyle
     class api_admin,api_client gatewayStyle
     class bastion,api_ticketing,api_payments,api_identity,api_notifications domainStyle
     class load_balancer,ip_addr,domain_name,cdn,waf infraStyle
-    class browser,device deviceStyle
+    class browser,device,ticket deviceStyle
     class payment_gateway,seating_service,email_provider,push_provider,identity_provider,exception_tracker,logging_service externalStyle
 
     %% Subgraph styling - layered fills, no borders
