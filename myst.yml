@@ -18,15 +18,23 @@ project:
       file: content/glossary.md
     - title: Architecture
       children:
-        - pattern: content/architecture/*.md
+        - file: content/architecture/index.md
+        - file: content/architecture/context.md
+        - file: content/architecture/deployment.md
+        - title: Components
+          children:
+            - pattern: content/architecture/components/*.md
     - title: Appendices
       children:
         - pattern: content/appendices/*.md
 
 site:
+  # https://mystmd.org/guide/website-templates#template-site-myst-book-theme
   template: book-theme
   options:
     hide_toc: false
+    hide_myst_branding: true
     style: _static/custom.css
-  # favicon: favicon.ico
-  # logo: site_logo.png
+    logo_text: XBOL Documentation
+  parts:
+    primary_sidebar_footer: ""

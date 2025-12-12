@@ -13,74 +13,74 @@ System Context Diagram - [View full size](/diagrams/context.svg)
 
 ## Network Flow
 
-All traffic enters through public domain names that resolve to static IP addresses within the {term}`VPC`. Requests pass through network services ({term}`CDN`, {term}`WAF`, {term}`Load Balancer`) before reaching their destination:
+All traffic enters through public domain names that resolve to {term}`Static IP` addresses within the {term}`VPC`. Requests pass through network services ({term}`CDN`, {term}`WAF`, {term}`Load Balancer`) before reaching their destination:
 
-1. **Web Clients**: Browser requests route to Admin Portal or Client Web, which then make API calls
-2. **Mobile Clients**: Native apps connect directly to {term}`Gateway API`s through the same network path
-3. **On-Premise**: Handheld devices connect to local {term}`Bastion` for offline operation; Bastion syncs with cloud via internet
+1. **Web Clients**: Browser requests route to {doc}`./components/admin-portal` or {doc}`./components/client-web`, which then make {term}`API` calls
+2. **Mobile Clients**: Native apps connect directly to Gateway APIs through the same network path
+3. **{term}`On-Premise`**: {doc}`./components/handheld` devices connect to local {doc}`./components/bastion` for offline operation; Bastion syncs with cloud via internet
 
 ## Authentication Flow
 
-Gateway APIs (Admin API, Client API) authenticate requests through Identity API, which verifies credentials against the Identity Provider. Gateway APIs then forward authenticated requests to {term}`Domain API`s.
+Gateway APIs ({doc}`./components/admin-api`, {doc}`./components/client-api`) authenticate requests through {doc}`./components/identity`, which verifies credentials against the Identity Provider. Gateway APIs then forward authenticated requests to Domain APIs.
 
 Domain APIs validate JWT tokens or API keys issued by Identity API but do not call Identity API directly on every request. This prevents creating a dependency bottleneck while maintaining security.
 
 ## Actors
 
-| Actor       | Description                            |
-| ----------- | -------------------------------------- |
-| Customer    | Purchases tickets via web or mobile    |
-| Admin Staff | Manages platform configuration         |
-| Box Office  | Sells tickets on-site via Admin Portal |
-| Gate Staff  | Validates tickets using handhelds      |
+| Actor       | Description                                                     |
+| ----------- | --------------------------------------------------------------- |
+| Customer    | Purchases tickets via web or mobile                             |
+| Admin Staff | Manages {term}`Platform` configuration                          |
+| Box Office  | Sells tickets on-site via {doc}`./components/admin-portal`      |
+| Gate Staff  | Validates tickets using {doc}`./components/handheld` devices    |
 
 ## Infrastructure
 
-| Component     | Location | Purpose                      |
-| ------------- | -------- | ---------------------------- |
-| Domain Name   | External | DNS resolution               |
-| Static IP     | Cloud    | Fixed VPC entry point        |
-| CDN           | Cloud    | Content delivery and caching |
-| WAF           | Cloud    | Web application firewall     |
-| Load Balancer | Cloud    | Traffic distribution         |
+| {term}`Component` | Location | Purpose                      |
+| ----------------- | -------- | ---------------------------- |
+| Domain Name       | External | DNS resolution               |
+| Static IP         | Cloud    | Fixed VPC entry point        |
+| CDN               | Cloud    | Content delivery and caching |
+| WAF               | Cloud    | Web application firewall     |
+| Load Balancer     | Cloud    | Traffic distribution         |
 
 ## Systems
 
 ### Web Clients
 
-| System       | Location | Purpose                            |
-| ------------ | -------- | ---------------------------------- |
-| Admin Portal | Cloud    | Staff web interface       |
-| Client Web   | Cloud    | Customer ticket purchasing |
+| System                                  | Location | Purpose                  |
+| --------------------------------------- | -------- | ------------------------ |
+| {doc}`./components/admin-portal`        | Cloud    | Staff web interface      |
+| {doc}`./components/client-web`          | Cloud    | Customer ticket purchasing |
 
 ### Mobile Clients
 
-| System        | Location   | Purpose                           |
-| ------------- | ---------- | --------------------------------- |
-| Client Mobile | Cloud      | Customer mobile app |
-| Handheld App  | On-premise | QR code scanning    |
+| System                                  | Location   | Purpose             |
+| --------------------------------------- | ---------- | ------------------- |
+| {doc}`./components/client-mobile`       | Cloud      | Customer mobile app |
+| {doc}`./components/handheld`            | On-Premise | QR code scanning    |
 
 ### Gateway APIs
 
-| System     | Location | Purpose                       |
-| ---------- | -------- | ----------------------------- |
-| Admin API  | Cloud    | Gateway for staff operations  |
-| Client API | Cloud    | Gateway for customer operations|
+| System                                  | Location | Purpose                        |
+| --------------------------------------- | -------- | ------------------------------ |
+| {doc}`./components/admin-api`           | Cloud    | Gateway for staff operations   |
+| {doc}`./components/client-api`          | Cloud    | Gateway for customer operations |
 
 ### Domain APIs
 
-| System        | Location | Purpose                            |
-| ------------- | -------- | ---------------------------------- |
-| Ticketing     | Cloud    | Seat reservations                  |
-| Payments      | Cloud    | Transaction processing             |
-| Identity      | Cloud    | Authentication and user management |
-| Notifications | Cloud    | Email and push delivery            |
+| System                                  | Location | Purpose                            |
+| --------------------------------------- | -------- | ---------------------------------- |
+| {doc}`./components/ticketing`           | Cloud    | Seat reservations                  |
+| {doc}`./components/payments`            | Cloud    | Transaction processing             |
+| {doc}`./components/identity`            | Cloud    | Authentication and user management |
+| {doc}`./components/notifications`       | Cloud    | Email and push delivery            |
 
 ### On-Premise
 
-| System  | Location   | Purpose                     |
-| ------- | ---------- | --------------------------- |
-| Bastion | On-premise | Offline validation and sync |
+| System                                  | Location   | Purpose                     |
+| --------------------------------------- | ---------- | --------------------------- |
+| {doc}`./components/bastion`             | On-Premise | Offline validation and sync |
 
 ## External Services
 
