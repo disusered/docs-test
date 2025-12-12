@@ -1,0 +1,149 @@
+graph LR
+    subgraph users[Users]
+        admin_staff[Admins]
+        box_office[Box Office]
+        customer[Customer]
+        gate_staff[Gate Staff]
+    end
+
+    browser[Browser]
+    device[Mobile Device]
+    domain_name[Domain Name]
+
+    subgraph platform[XBOL Platform]
+      client_mobile[Mobile Client]
+
+      subgraph vpc[Virtual Private Cloud]
+        ip_addr[Static IP]
+
+        subgraph vpc_services[VPC Network Services]
+          cdn[CDN]
+          waf[WAF]
+          load_balancer[Load Balancer]
+        end
+
+        subgraph web_clients[Web Clients]
+            admin_portal[Admin Portal]
+            client_web[User Portal]
+        end
+
+        subgraph gateway[Gateway APIs]
+            api_admin[Admin API]
+            api_client[Client API]
+        end
+
+        subgraph domain[Domain APIs]
+            api_ticketing[Ticketing API]
+            api_payments[Payments API]
+            api_identity[Identity API]
+            api_notifications[Notifications API]
+        end
+      end
+
+        subgraph onprem[On-Premise]
+            bastion[Bastion]
+            client_handheld[Handheld Client]
+        end
+    end
+
+    subgraph external[External Services]
+        payment_gateway[Payment Gateway]
+        seating_service[Seat Reservation]
+        email_provider[Email Provider]
+        push_provider[Push Provider]
+        identity_provider[Identity Provider]
+        exception_tracker[Exception Tracker]
+        logging_service[Logging Service]
+    end
+
+    %% Normal customer can use the web app or the mobile app
+    customer --> browser
+    customer --> device
+    device --> client_mobile
+
+    %% Admin and box office staff can use the admin portal
+    admin_staff --> browser
+    box_office --> browser
+
+    %% Gate staff use the handheld app
+    gate_staff --> device
+    device --> client_handheld
+
+    %% The handheld connects to the local bastion for offline functionality
+    client_handheld -->|Local| bastion
+    bastion -->|Internet| domain_name
+
+    %% The web app needs to resolve the public domain before redirecting to the
+    %% web client: Blazor for Admin and React for Mobile
+    browser -->|Internet| domain_name
+
+    %% The mobile app uses API and network services through the public domain
+    client_mobile -->|Internet| domain_name
+
+    %% The domain(s) redirect to static ip reservation(s)
+    domain_name --> ip_addr
+
+    %% The IP address(es) redirect to the VPC network services
+    ip_addr --> vpc_services
+
+    %% The VPC network services then redirect to the web app or API
+    %% The web clients don't connect directly to the APIs, they load the site
+    %% on the user's device, which then requests from APIs or CDN
+    vpc_services --> admin_portal
+    vpc_services --> client_web
+    vpc_services --> api_client
+    vpc_services --> api_admin
+
+    %% The Gateway APIs connect to Domain APIs
+    api_admin --> api_identity
+    api_admin --> api_ticketing
+    api_admin --> api_payments
+    api_admin --> api_notifications
+    api_client --> api_identity
+    api_client --> api_ticketing
+    api_client --> api_payments
+    api_client --> api_notifications
+
+    %% The Identity API may rely on an external database or provider
+    api_identity --> identity_provider
+
+    %% The Ticketing API relies on a seating service like seats.io
+    api_ticketing --> seating_service
+
+    %% The Payment API relies on a payment processor
+    api_payments --> payment_gateway
+
+    %% The Notifications API relies on notification channel providers
+    api_notifications --> email_provider
+    api_notifications --> push_provider
+
+    %% All our platform services log their output and exceptions
+    platform --> exception_tracker
+    platform --> logging_service
+
+    classDef userStyle fill:#4A90E2,stroke:#4A90E2,color:#fff
+    classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef infraStyle fill:#34495E,stroke:#34495E,color:#fff
+    classDef deviceStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef externalStyle fill:#E8E8E8,stroke:#999,color:#333
+
+    class customer,admin_staff,box_office,gate_staff userStyle
+    class admin_portal,client_handheld,client_web,client_mobile clientStyle
+    class api_admin,api_client gatewayStyle
+    class bastion,api_ticketing,api_payments,api_identity,api_notifications domainStyle
+    class load_balancer,ip_addr,domain_name,cdn,waf infraStyle
+    class browser,device deviceStyle
+    class payment_gateway,seating_service,email_provider,push_provider,identity_provider,exception_tracker,logging_service externalStyle
+
+    %% Subgraph styling - layered opacity, no borders
+    style users fill:rgba(74,144,226,0.1),stroke:none
+    style platform fill:rgba(80,200,120,0.08),stroke:none
+    style vpc fill:rgba(80,200,120,0.1),stroke:none
+    style vpc_services fill:rgba(52,73,94,0.15),stroke:none
+    style web_clients fill:rgba(123,104,238,0.15),stroke:none
+    style gateway fill:rgba(80,200,120,0.15),stroke:none
+    style domain fill:rgba(255,159,64,0.15),stroke:none
+    style onprem fill:rgba(108,117,125,0.1),stroke:none
+    style external fill:rgba(200,200,200,0.15),stroke:none
