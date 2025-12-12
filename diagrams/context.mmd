@@ -1,3 +1,4 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 graph LR
     subgraph users[Users]
         admin_staff[Admins]
@@ -11,7 +12,7 @@ graph LR
     domain_name[Domain Name]
 
     subgraph platform[XBOL Platform]
-      client_mobile[Mobile Client]
+      client_mobile[Client Mobile]
 
       subgraph vpc[Virtual Private Cloud]
         ip_addr[Static IP]
@@ -24,7 +25,7 @@ graph LR
 
         subgraph web_clients[Web Clients]
             admin_portal[Admin Portal]
-            client_web[User Portal]
+            client_web[Client Web]
         end
 
         subgraph gateway[Gateway APIs]
@@ -42,7 +43,7 @@ graph LR
 
         subgraph onprem[On-Premise]
             bastion[Bastion]
-            client_handheld[Handheld Client]
+            handheld[Handheld]
         end
     end
 
@@ -67,10 +68,10 @@ graph LR
 
     %% Gate staff use the handheld app
     gate_staff --> device
-    device --> client_handheld
+    device --> handheld
 
     %% The handheld connects to the local bastion for offline functionality
-    client_handheld -->|Local| bastion
+    handheld -->|Local| bastion
     bastion -->|Internet| domain_name
 
     %% The web app needs to resolve the public domain before redirecting to the
@@ -121,29 +122,30 @@ graph LR
     platform --> exception_tracker
     platform --> logging_service
 
+    %% Node styles - stroke matches fill for borderless look
     classDef userStyle fill:#4A90E2,stroke:#4A90E2,color:#fff
     classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
     classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
     classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
     classDef infraStyle fill:#34495E,stroke:#34495E,color:#fff
     classDef deviceStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
-    classDef externalStyle fill:#E8E8E8,stroke:#999,color:#333
+    classDef externalStyle fill:#E8E8E8,stroke:#E8E8E8,color:#333
 
     class customer,admin_staff,box_office,gate_staff userStyle
-    class admin_portal,client_handheld,client_web,client_mobile clientStyle
+    class admin_portal,handheld,client_web,client_mobile clientStyle
     class api_admin,api_client gatewayStyle
     class bastion,api_ticketing,api_payments,api_identity,api_notifications domainStyle
     class load_balancer,ip_addr,domain_name,cdn,waf infraStyle
     class browser,device deviceStyle
     class payment_gateway,seating_service,email_provider,push_provider,identity_provider,exception_tracker,logging_service externalStyle
 
-    %% Subgraph styling - layered opacity, no borders
-    style users fill:rgba(74,144,226,0.1),stroke:none
-    style platform fill:rgba(80,200,120,0.08),stroke:none
-    style vpc fill:rgba(80,200,120,0.1),stroke:none
-    style vpc_services fill:rgba(52,73,94,0.15),stroke:none
-    style web_clients fill:rgba(123,104,238,0.15),stroke:none
-    style gateway fill:rgba(80,200,120,0.15),stroke:none
-    style domain fill:rgba(255,159,64,0.15),stroke:none
-    style onprem fill:rgba(108,117,125,0.1),stroke:none
-    style external fill:rgba(200,200,200,0.15),stroke:none
+    %% Subgraph styling - layered fills, no borders
+    style users fill:#e7f0fb,stroke:#e7f0fb
+    style platform fill:#ecf9f0,stroke:#ecf9f0
+    style vpc fill:#e0f5e6,stroke:#e0f5e6
+    style vpc_services fill:#dde4e9,stroke:#dde4e9
+    style web_clients fill:#e8e4fc,stroke:#e8e4fc
+    style gateway fill:#b8e6c4,stroke:#b8e6c4
+    style domain fill:#ffeddb,stroke:#ffeddb
+    style onprem fill:#e8e9ea,stroke:#e8e9ea
+    style external fill:#f5f0fa,stroke:#f5f0fa
