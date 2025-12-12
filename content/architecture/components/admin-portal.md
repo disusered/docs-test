@@ -11,6 +11,15 @@ The Admin Portal is the staff-facing web application for platform administration
 - **Platform**: Blazor Server (.NET 10)
 - **Deployment**: Docker container via Docker Compose
 
+## Build & Deployment
+
+```{figure} /diagrams/component-admin-portal.svg
+:name: fig-component-admin-portal
+:width: 100%
+
+Admin Portal Build & Deployment Pipeline - [View full size](/diagrams/component-admin-portal.svg)
+```
+
 ## Role
 
 Provides staff with tools to:

@@ -11,6 +11,15 @@ The {term}`Notifications` {term}`Service` delivers messages to users via email a
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
 
+## Architecture
+
+```{figure} /diagrams/component-notifications.svg
+:name: fig-component-notifications
+:width: 100%
+
+Notifications API Architecture - [View full size](/diagrams/component-notifications.svg)
+```
+
 ## Backing Services
 
 | Role | Technology | Provider |

@@ -11,6 +11,10 @@ The Handheld application is the staff-facing mobile app for ticket validation at
 - **{term}`Platform`**: React Native (Android only)
 - **Distribution**: Side-loaded APK (not on app stores)
 
+## Architecture
+
+Architecture diagrams for mobile applications are planned for future documentation.
+
 ## Role
 
 Provides gate staff with:

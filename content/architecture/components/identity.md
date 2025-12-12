@@ -11,6 +11,15 @@ The {term}`Identity` {term}`Service` manages user authentication, authorization,
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
 
+## Architecture
+
+```{figure} /diagrams/component-identity.svg
+:name: fig-component-identity
+:width: 100%
+
+Identity API Architecture - [View full size](/diagrams/component-identity.svg)
+```
+
 ## Backing Services
 
 | Role | Technology | Provider |

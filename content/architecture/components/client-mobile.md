@@ -11,6 +11,10 @@ The Client Mobile application is the customer-facing mobile app for ticket purch
 - **{term}`Platform`**: React Native (iOS and Android)
 - **Distribution**: App Store (iOS), Google Play (Android)
 
+## Architecture
+
+Architecture diagrams for mobile applications are planned for future documentation.
+
 ## Role
 
 Provides customers with:
