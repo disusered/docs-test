@@ -2,7 +2,7 @@
 title: Client API
 ---
 
-The Client API is a {term}`Gateway API` that serves as the entry point for customer-facing applications.
+The Client API is a {term}`Gateway API` that serves as the entry point for customer-facing applications. It manages seat inventory via seats.io and maintains local state for session management.
 
 ## Overview
 
@@ -10,6 +10,15 @@ The Client API is a {term}`Gateway API` that serves as the entry point for custo
 - **Repository**: `xbol-api-client`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
+
+## Architecture
+
+```{figure} /diagrams/component-client-api.svg
+:name: fig-component-client-api
+:width: 100%
+
+Client API Architecture - [View full size](/diagrams/component-client-api.svg)
+```
 
 ## Role
 
@@ -34,7 +43,9 @@ Routes authenticated requests from {term}`Client` applications to Domain APIs:
 
 ## External Providers
 
-None directly - orchestrates calls to Domain APIs which connect to external providers.
+| Provider | Service | Purpose |
+|----------|---------|---------|
+| seats.io | Seat Reservation | Interactive seating charts and real-time seat availability |
 
 ## Detailed Documentation
 
