@@ -1,0 +1,26 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+graph TB
+    api[Identity API]
+
+    subgraph backing[Backing Services]
+        postgres[(PostgreSQL)]
+        redis[(Redis)]
+    end
+
+    identity_provider[Identity Provider]
+
+    api --> postgres
+    api --> redis
+    api --> identity_provider
+
+    %% Node styles
+    classDef apiStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+    classDef externalStyle fill:#E8E8E8,stroke:#E8E8E8,color:#333
+
+    class api apiStyle
+    class postgres,redis storageStyle
+    class identity_provider externalStyle
+
+    %% Subgraph styling
+    style backing fill:#e0e3e4,stroke:#e0e3e4
