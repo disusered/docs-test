@@ -14,8 +14,20 @@ API
 Bastion
 : An on-premise server enabling offline ticket validation when cloud connectivity is unavailable.
 
+Cache
+: A high-speed data store that keeps frequently accessed data in memory for fast retrieval.
+
 CDN
 : Content Delivery Network. Caches and serves static content from edge locations near users.
+
+Client
+: An application that end users interact with directly (web browser, mobile app, handheld device).
+
+Component
+: A deployable unit within the XBOL system, such as an API, web application, or background service.
+
+Database
+: Persistent storage (PostgreSQL via RDS) where services store and retrieve application data.
 
 Domain API
 : A service responsible for a specific business capability (ticketing, payments, identity, notifications).
@@ -41,6 +53,12 @@ On-Premise
 Payments
 : The service processing financial transactions and maintaining payment records.
 
+Platform
+: The deployment target for a client application (iOS, Android, Web browser).
+
+Service
+: A running process that performs work, either an API handling requests or a background worker processing tasks.
+
 Static IP
 : A fixed public IP address that provides a stable entry point for DNS resolution.
 
@@ -58,17 +76,4 @@ XBOL
 
 XBOL System
 : The complete XBOL solution including all software components, databases, and integrations.
-:::
-
----
-
-:::{tip}
-To add new terms, use this format inside the glossary directive:
-
-```
-TermName
-: Definition of the term.
-```
-
-Reference terms in other documents using `` {term}`XBOL` ``.
 :::
