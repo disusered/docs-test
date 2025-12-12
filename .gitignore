@@ -1,5 +1,6 @@
 # MyST build outputs
 _build
+exports/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

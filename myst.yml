@@ -12,6 +12,11 @@ project:
     - system design
   authors: []
   github:
+  exports:
+    - format: typst
+      output: exports/xbol-documentation.pdf
+    - format: docx
+      output: exports/xbol-documentation.docx
   toc:
     - file: content/index.md
     - title: Glossary

@@ -10,6 +10,36 @@ uv run jupyter-book start      # Dev server at localhost:3000
 uv run jupyter-book build      # Build site
 ```
 
+## Exporting to PDF / DOCX
+
+### Prerequisites
+
+Install [Typst](https://typst.app/) for PDF generation:
+
+```bash
+# macOS
+brew install typst
+
+# Linux (Arch)
+pacman -S typst
+
+# Linux (cargo)
+cargo install typst-cli
+
+# Windows
+winget install --id Typst.Typst
+```
+
+### Build Exports
+
+```bash
+uv run jupyter-book build --typst   # Build PDF (via Typst)
+uv run jupyter-book build --docx    # Build DOCX
+uv run jupyter-book build --all     # Build all exports
+```
+
+Outputs are saved to `exports/`.
+
 ## Adding Content
 
 1. Copy `content/_template.md` to `content/architecture/` or `content/appendices/`
@@ -81,7 +111,7 @@ Theme is auto-injected from `_terms.yml`. Commit both `.mmd` and `.svg` files.
 
 ## TODO
 
-- [ ] Glossary terms (Gateway, Payments, Notifications, Ticketing, Identity)
+- [x] Glossary terms (Gateway, Payments, Notifications, Ticketing, Identity)
 - [ ] GitHub Actions publish to pages
-- [ ] PDF
+- [x] PDF / DOCX export
 - [ ] Add abstract and summary <https://mystmd.org/guide/document-parts>
