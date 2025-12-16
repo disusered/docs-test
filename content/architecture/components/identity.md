@@ -2,11 +2,11 @@
 title: Identity
 ---
 
-The {term}`Identity` {term}`Service` manages user authentication, authorization, and account information.
+The Identity Service manages user authentication, authorization, and account information.
 
 ## Overview
 
-- **Type**: {term}`Domain API`
+- **Type**: Domain API
 - **Repository**: `xbol-identity-provider`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
@@ -17,24 +17,22 @@ The {term}`Identity` {term}`Service` manages user authentication, authorization,
 :name: fig-component-identity
 :width: 100%
 
-Identity API Architecture - [View full size](/diagrams/component-identity.svg)
+Identity API Architecture — [Full size](#appendix-identity)
 ```
 
 ## Backing Services
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | PostgreSQL | AWS RDS |
-| {term}`Cache` | Redis | Docker container |
+| Database | PostgreSQL | AWS RDS |
+| Cache | Redis | Docker container |
 
 ## External Providers
 
 | Provider | Service | Purpose |
 |----------|---------|---------|
 | TBD | Identity Provider | OAuth/OIDC federation for external authentication |
+| Rollbar | Exception Tracker | Error monitoring and alerting |
+| AWS CloudWatch | Logging | Centralized log aggregation and metrics |
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

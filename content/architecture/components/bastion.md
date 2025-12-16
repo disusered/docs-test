@@ -2,18 +2,18 @@
 title: Bastion
 ---
 
-The {term}`Bastion` is an {term}`On-Premise` server enabling offline ticket validation when cloud connectivity is unavailable.
+The Bastion is an On-Premise server enabling offline ticket validation when cloud connectivity is unavailable.
 
 ## Overview
 
-- **Type**: {term}`Domain API` ({term}`On-Premise`)
+- **Type**: Domain API (On-Premise)
 - **Repository**: TBD
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose (on venue hardware)
 
 ## Role
 
-- Provides offline ticket validation for {doc}`./handheld` devices
+- Provides offline ticket validation for [](./handheld) devices
 - Caches ticket data from cloud for offline access
 - Syncs validation logs to cloud when connectivity resumes
 
@@ -21,8 +21,8 @@ The {term}`Bastion` is an {term}`On-Premise` server enabling offline ticket vali
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | SQLite | Local file |
-| {term}`Cache` | In-memory | Application |
+| Database | SQLite | Local file |
+| Cache | In-memory | Application |
 
 ## External Providers
 
@@ -32,11 +32,7 @@ The {term}`Bastion` is an {term}`On-Premise` server enabling offline ticket vali
 
 ## Network
 
-- **LAN**: Serves {doc}`./handheld` devices over local network
+- **LAN**: Serves [](./handheld) devices over local network
 - **Internet**: Syncs with cloud Gateway APIs when available
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

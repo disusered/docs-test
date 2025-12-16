@@ -6,9 +6,9 @@ The Handheld application is the staff-facing mobile app for ticket validation at
 
 ## Overview
 
-- **Type**: {term}`Client` (Mobile Application)
+- **Type**: Client (Mobile Application)
 - **Repository**: `xbol-app-handheld`
-- **{term}`Platform`**: React Native (Android only)
+- **Platform**: React Native (Android only)
 - **Distribution**: Side-loaded APK (not on app stores)
 
 ## Architecture
@@ -20,21 +20,23 @@ Architecture diagrams for mobile applications are planned for future documentati
 Provides gate staff with:
 
 - QR code scanning for ticket validation
-- Offline validation via {doc}`./bastion` connection
+- Offline validation via [](./bastion) connection
 - Entry logging and statistics
 
 ## Network Mode
 
 ### Online Mode
 
-Connects to {doc}`./client-api` through the internet for real-time validation.
+Connects to [](./client-api) through the internet for real-time validation.
 
 ### Offline Mode
 
-Connects to local {doc}`./bastion` over LAN when internet is unavailable. Validation data syncs to cloud when connectivity resumes.
+Connects to local [](./bastion) over LAN when internet is unavailable. Validation data syncs to cloud when connectivity resumes.
 
-## Detailed Documentation
+## External Providers
 
-Coming soon.
+| Provider | Service | Purpose |
+|----------|---------|---------|
+| Rollbar | Crash Reporting | Mobile app error monitoring and alerting |
 
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

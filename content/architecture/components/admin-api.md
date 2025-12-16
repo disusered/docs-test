@@ -2,11 +2,11 @@
 title: Admin API
 ---
 
-The Admin API is a {term}`Gateway API` that serves as the entry point for staff-facing applications. It manages seat inventory and event configuration via seats.io, and maintains local state for administrative workflows.
+The Admin API is a Gateway API that serves as the entry point for staff-facing applications.
 
 ## Overview
 
-- **Type**: {term}`Gateway API`
+- **Type**: Gateway API
 - **Repository**: `xbol-api-admin`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
@@ -17,33 +17,30 @@ The Admin API is a {term}`Gateway API` that serves as the entry point for staff-
 :name: fig-component-admin-api
 :width: 100%
 
-Admin API Architecture - [View full size](/diagrams/component-admin-api.svg)
+Admin API Architecture — [Full size](#appendix-admin-api)
 ```
 
 ## Role
 
-Routes authenticated requests from {doc}`./admin-portal` to Domain APIs:
+Routes authenticated requests from [](./admin-portal) to Domain APIs:
 
-- {doc}`./ticketing` - Event and seat management
-- {doc}`./payments` - Transaction history and refunds
-- {doc}`./identity` - User and role management
-- {doc}`./notifications` - Notification configuration
+- [](./ticketing) - Event and seat management
+- [](./payments) - Transaction history and refunds
+- [](./identity) - User and role management
+- [](./notifications) - Notification configuration
 
 ## Backing Services
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | PostgreSQL | AWS RDS |
-| {term}`Cache` | Redis | Docker container |
+| Database | PostgreSQL | AWS RDS |
+| Cache | Redis | Docker container |
 
 ## External Providers
 
 | Provider | Service | Purpose |
 |----------|---------|---------|
-| seats.io | Seat Reservation | Event seating configuration and seat inventory management |
+| Rollbar | Exception Tracker | Error monitoring and alerting |
+| AWS CloudWatch | Logging | Centralized log aggregation and metrics |
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

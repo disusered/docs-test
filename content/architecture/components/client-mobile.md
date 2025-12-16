@@ -6,9 +6,9 @@ The Client Mobile application is the customer-facing mobile app for ticket purch
 
 ## Overview
 
-- **Type**: {term}`Client` (Mobile Application)
+- **Type**: Client (Mobile Application)
 - **Repository**: `xbol-app-client`
-- **{term}`Platform`**: React Native (iOS and Android)
+- **Platform**: React Native (iOS and Android)
 - **Distribution**: App Store (iOS), Google Play (Android)
 
 ## Architecture
@@ -27,10 +27,12 @@ Provides customers with:
 
 ## API Integration
 
-Communicates exclusively with {doc}`./client-api` for all backend operations.
+Communicates exclusively with [](./client-api) for all backend operations.
 
-## Detailed Documentation
+## External Providers
 
-Coming soon.
+| Provider | Service | Purpose |
+|----------|---------|---------|
+| Rollbar | Crash Reporting | Mobile app error monitoring and alerting |
 
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

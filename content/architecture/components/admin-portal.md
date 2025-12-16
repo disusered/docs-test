@@ -6,18 +6,18 @@ The Admin Portal is the staff-facing web application for platform administration
 
 ## Overview
 
-- **Type**: {term}`Client` (Web Application)
+- **Type**: Client (Web Application)
 - **Repository**: `xbol-web-admin`
 - **Platform**: Blazor Server (.NET 10)
 - **Deployment**: Docker container via Docker Compose
 
-## Build & Deployment
+## Architecture
 
 ```{figure} /diagrams/component-admin-portal.svg
 :name: fig-component-admin-portal
 :width: 100%
 
-Admin Portal Build & Deployment Pipeline - [View full size](/diagrams/component-admin-portal.svg)
+Admin Portal Architecture — [Full size](#appendix-admin-portal)
 ```
 
 ## Role
@@ -32,10 +32,12 @@ Provides staff with tools to:
 
 ## API Integration
 
-Communicates exclusively with {doc}`./admin-api` for all backend operations.
+Communicates exclusively with [](./admin-api) for all backend operations.
 
-## Detailed Documentation
+## External Providers
 
-Coming soon.
+| Provider | Service | Purpose |
+|----------|---------|---------|
+| Rollbar | Exception Tracker | Error monitoring in browser and server |
 
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

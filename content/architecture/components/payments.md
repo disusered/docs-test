@@ -2,11 +2,11 @@
 title: Payments
 ---
 
-The {term}`Payments` {term}`Service` processes financial transactions and maintains payment records.
+The Payments Service processes financial transactions and maintains payment records.
 
 ## Overview
 
-- **Type**: {term}`Domain API`
+- **Type**: Domain API
 - **Repository**: `xbol-api-payments`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
@@ -17,25 +17,23 @@ The {term}`Payments` {term}`Service` processes financial transactions and mainta
 :name: fig-component-payments
 :width: 100%
 
-Payments API Architecture - [View full size](/diagrams/component-payments.svg)
+Payments API Architecture — [Full size](#appendix-payments)
 ```
 
 ## Backing Services
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | PostgreSQL | AWS RDS |
-| {term}`Cache` | Redis | Docker container |
-| {term}`Message Broker` | RabbitMQ | Docker container |
+| Database | PostgreSQL | AWS RDS |
+| Cache | Redis | Docker container |
+| Message Broker | RabbitMQ | Docker container |
 
 ## External Providers
 
 | Provider | Service | Purpose |
 |----------|---------|---------|
 | TBD | Payment Gateway | Credit card processing and payment authorization |
+| Rollbar | Exception Tracker | Error monitoring and alerting |
+| AWS CloudWatch | Logging | Centralized log aggregation and metrics |
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

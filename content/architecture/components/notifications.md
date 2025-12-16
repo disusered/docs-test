@@ -2,11 +2,11 @@
 title: Notifications
 ---
 
-The {term}`Notifications` {term}`Service` delivers messages to users via email and push notifications.
+The Notifications Service delivers messages to users via email and push notifications.
 
 ## Overview
 
-- **Type**: {term}`Domain API`
+- **Type**: Domain API
 - **Repository**: `xbol-api-notifications`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
@@ -17,25 +17,23 @@ The {term}`Notifications` {term}`Service` delivers messages to users via email a
 :name: fig-component-notifications
 :width: 100%
 
-Notifications API Architecture - [View full size](/diagrams/component-notifications.svg)
+Notifications API Architecture — [Full size](#appendix-notifications)
 ```
 
 ## Backing Services
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | PostgreSQL | AWS RDS |
-| {term}`Message Broker` | RabbitMQ | Docker container |
+| Database | PostgreSQL | AWS RDS |
+| Message Broker | RabbitMQ | Docker container |
 
 ## External Providers
 
 | Provider | Service | Purpose |
 |----------|---------|---------|
-| TBD | Email Provider | Transactional email delivery (confirmations, receipts) |
+| Mailchimp | Email Provider | Transactional email delivery (confirmations, receipts) |
 | TBD | Push Provider | Mobile and web push notification delivery |
+| Rollbar | Exception Tracker | Error monitoring and alerting |
+| AWS CloudWatch | Logging | Centralized log aggregation and metrics |
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.

@@ -2,11 +2,11 @@
 title: Client API
 ---
 
-The Client API is a {term}`Gateway API` that serves as the entry point for customer-facing applications. It manages seat inventory via seats.io and maintains local state for session management.
+The Client API is a Gateway API that serves as the entry point for customer-facing applications.
 
 ## Overview
 
-- **Type**: {term}`Gateway API`
+- **Type**: Gateway API
 - **Repository**: `xbol-api-client`
 - **Platform**: .NET 10 (ASP.NET Core API template)
 - **Deployment**: Docker container via Docker Compose
@@ -17,38 +17,35 @@ The Client API is a {term}`Gateway API` that serves as the entry point for custo
 :name: fig-component-client-api
 :width: 100%
 
-Client API Architecture - [View full size](/diagrams/component-client-api.svg)
+Client API Architecture — [Full size](#appendix-client-api)
 ```
 
 ## Role
 
-Routes authenticated requests from {term}`Client` applications to Domain APIs:
+Routes authenticated requests from Client applications to Domain APIs:
 
-- {doc}`./ticketing` - Ticket browsing and purchasing
-- {doc}`./payments` - Payment processing
-- {doc}`./identity` - Authentication and profile
-- {doc}`./notifications` - Notification preferences
+- [](./ticketing) - Ticket browsing and purchasing
+- [](./payments) - Payment processing
+- [](./identity) - Authentication and profile
+- [](./notifications) - Notification preferences
 
 ## Clients Served
 
-- {doc}`./client-web` - Customer web application
-- {doc}`./client-mobile` - Customer mobile application
+- [](./client-web) - Customer web application
+- [](./client-mobile) - Customer mobile application
 
 ## Backing Services
 
 | Role | Technology | Provider |
 |------|------------|----------|
-| {term}`Database` | PostgreSQL | AWS RDS |
-| {term}`Cache` | Redis | Docker container |
+| Database | PostgreSQL | AWS RDS |
+| Cache | Redis | Docker container |
 
 ## External Providers
 
 | Provider | Service | Purpose |
 |----------|---------|---------|
-| seats.io | Seat Reservation | Interactive seating charts and real-time seat availability |
+| Rollbar | Exception Tracker | Error monitoring and alerting |
+| AWS CloudWatch | Logging | Centralized log aggregation and metrics |
 
-## Detailed Documentation
-
-Coming soon.
-
-See {doc}`../index` for service inventory.
+See [](../index) for service inventory.
