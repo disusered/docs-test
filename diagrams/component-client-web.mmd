@@ -1,25 +1,17 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
-graph LR
-    source[Source Code]
-    github[GitHub Actions]
-    cdn[CDN / S3]
-    client_api[Client API]
+graph TB
     browser[Browser]
+    cdn[CDN]
+    client_api[Client API]
 
-    source --> github
-    github --> cdn
     browser --> cdn
     browser --> client_api
 
     %% Node styles
-    classDef devStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
-    classDef cicdStyle fill:#50C878,stroke:#50C878,color:#fff
-    classDef hostingStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
-    classDef apiStyle fill:#50C878,stroke:#50C878,color:#fff
     classDef clientStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef hostingStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
 
-    class source devStyle
-    class github cicdStyle
-    class cdn hostingStyle
-    class client_api apiStyle
     class browser clientStyle
+    class cdn hostingStyle
+    class client_api gatewayStyle
