@@ -4,28 +4,28 @@ title: Overview
 
 ## Architecture Diagrams
 
-| Diagram                 | Purpose                                            |
-| ----------------------- | -------------------------------------------------- |
-| {doc}`./context`        | High-level view of actors, systems, and boundaries |
-| {doc}`./deployment`     | Provider boundaries and technology choices         |
+| Diagram          | Purpose                                            |
+| ---------------- | -------------------------------------------------- |
+| [](./context)    | High-level view of actors, systems, and boundaries |
+| [](./deployment) | Provider boundaries and technology choices         |
 
 ## Architecture Principles
 
 ### 1. Gateway API
 
-{doc}`./components/client-api` and {doc}`./components/admin-api` are the primary entry points for front-end applications. These Gateway APIs handle authentication and orchestrate calls to Domain APIs ({doc}`./components/ticketing`, {doc}`./components/payments`, {doc}`./components/notifications`, {doc}`./components/identity`). Domain APIs are not directly consumed by front-ends under normal operation, though they remain independently accessible for internal tooling or future integrations.
+[](./components/client-api) and [](./components/admin-api) are the primary entry points for front-end applications. These Gateway APIs handle authentication and orchestrate calls to Domain APIs ([](./components/ticketing), [](./components/payments), [](./components/notifications), [](./components/identity)). Domain APIs are not directly consumed by front-ends under normal operation, though they remain independently accessible for internal tooling or future integrations.
 
 ### 2. Database Per Service
 
-Each {term}`API` owns its backing services ({term}`Database`, {term}`Cache`, {term}`Message Broker`). Even when sharing physical infrastructure, services are logically isolated.
+Each API owns its backing services (Database, Cache, Message Broker). Even when sharing physical infrastructure, services are logically isolated.
 
 ### 3. Offline Resilience
 
-The {doc}`./components/bastion` system enables ticket validation when cloud connectivity is unavailable. Staff scan QR codes on tickets or devices using {doc}`./components/handheld` connected to the bastion locally. Validation works offline; data syncs with cloud when connectivity resumes. Web and mobile {term}`Client` apps require internet connectivity.
+The [](./components/bastion) system enables ticket validation when cloud connectivity is unavailable. Staff scan QR codes on tickets or devices using [](./components/handheld) connected to the bastion locally. Validation works offline; data syncs with cloud when connectivity resumes. Web and mobile Client apps require internet connectivity.
 
 ### 4. Multi-Channel Messaging
 
-Services send {term}`Notifications` via email and push notifications through a dedicated {doc}`./components/notifications`. Additional channels (SMS, etc.) can be added as needed.
+Services send notifications via email and push notifications through a dedicated [](./components/notifications). Additional channels (SMS, etc.) can be added as needed.
 
 ### 5. Structured Logging
 
@@ -33,7 +33,7 @@ All processes use structured logging. Logs are written to local text files and p
 
 ### 6. Infrastructure Simplicity
 
-Initial deployment runs all services on a single VM with Docker Compose. Cloud-managed networking handles {term}`Load Balancer`, SSL termination, {term}`CDN`, {term}`WAF`, and {term}`Static IP` allocation. DNS is managed by external domain registrar.
+Initial deployment runs all services on a single VM with Docker Compose. Cloud-managed networking handles Load Balancer, SSL termination, CDN, WAF, and Static IP allocation. DNS is managed by external domain registrar.
 
 ## Service Inventory
 
@@ -43,29 +43,29 @@ The platform comprises the following services:
 
 #### Gateway APIs
 
-| {term}`Component`                       | Location | Tech    | Purpose                             |
-| --------------------------------------- | -------- | ------- | ----------------------------------- |
-| {doc}`./components/admin-api`           | Cloud    | .NET 10 | Entry point for admin front-ends    |
-| {doc}`./components/client-api`          | Cloud    | .NET 10 | Entry point for customer front-ends |
+| Component                   | Location | Tech    | Purpose                             |
+| --------------------------- | -------- | ------- | ----------------------------------- |
+| [](./components/admin-api)  | Cloud    | .NET 10 | Entry point for admin front-ends    |
+| [](./components/client-api) | Cloud    | .NET 10 | Entry point for customer front-ends |
 
 #### Domain APIs
 
-| Component                               | Location | Tech    | Purpose                                 |
-| --------------------------------------- | -------- | ------- | --------------------------------------- |
-| {doc}`./components/ticketing`           | Cloud    | .NET 10 | Ticket reservations and seat management |
-| {doc}`./components/payments`            | Cloud    | .NET 10 | Payment processing and transaction logs |
-| {doc}`./components/identity`            | Cloud    | .NET 10 | Authentication and user management      |
-| {doc}`./components/notifications`       | Cloud    | .NET 10 | Email and push notification delivery    |
+| Component                      | Location | Tech    | Purpose                                 |
+| ------------------------------ | -------- | ------- | --------------------------------------- |
+| [](./components/ticketing)     | Cloud    | .NET 10 | Ticket reservations and seat management |
+| [](./components/payments)      | Cloud    | .NET 10 | Payment processing and transaction logs |
+| [](./components/identity)      | Cloud    | .NET 10 | Authentication and user management      |
+| [](./components/notifications) | Cloud    | .NET 10 | Email and push notification delivery    |
 
 #### Front-Ends
 
-| Component                               | Location       | Tech                       | Purpose                     |
-| --------------------------------------- | -------------- | -------------------------- | --------------------------- |
-| {doc}`./components/admin-portal`        | Cloud          | Blazor                     | Staff administration        |
-| {doc}`./components/client-web`          | Cloud          | React                      | Customer ticket purchasing  |
-| {doc}`./components/client-mobile`       | Cloud          | React Native (Android/iOS) | Customer mobile experience  |
-| {doc}`./components/handheld`            | {term}`On-Premise` | React Native (Android)     | Staff ticket validation     |
-| {doc}`./components/bastion`             | On-Premise     | .NET 10                    | Offline sync and validation |
+| Component                      | Location   | Tech                       | Purpose                     |
+| ------------------------------ | ---------- | -------------------------- | --------------------------- |
+| [](./components/admin-portal)  | Cloud      | Blazor                     | Staff administration        |
+| [](./components/client-web)    | Cloud      | React                      | Customer ticket purchasing  |
+| [](./components/client-mobile) | Cloud      | React Native (Android/iOS) | Customer mobile experience  |
+| [](./components/handheld)      | On-Premise | React Native (Android)     | Staff ticket validation     |
+| [](./components/bastion)       | On-Premise | .NET 10                    | Offline sync and validation |
 
 ### External Services
 
@@ -92,25 +92,25 @@ The platform comprises the following services:
 | CDN                 | Edge caching and DDoS mitigation           |
 | WAF                 | Request filtering and security rules       |
 | Certificate Manager | Automated SSL/TLS certificate provisioning |
-| {term}`VPC`         | Network isolation and security boundaries  |
+| VPC                 | Network isolation and security boundaries  |
 
 ## Repository Mapping
 
-| Component                               | Repository               |
-| --------------------------------------- | ------------------------ |
-| {doc}`./components/admin-api`           | `xbol-api-admin`         |
-| {doc}`./components/client-api`          | `xbol-api-client`        |
-| {doc}`./components/ticketing`           | `xbol-api-ticketing`     |
-| {doc}`./components/payments`            | `xbol-api-payments`      |
-| {doc}`./components/identity`            | `xbol-identity-provider` |
-| {doc}`./components/notifications`       | `xbol-api-notifications` |
-| {doc}`./components/admin-portal`        | `xbol-web-admin`         |
-| {doc}`./components/client-web`          | `xbol-web-client`        |
-| {doc}`./components/client-mobile`       | `xbol-app-client`        |
-| {doc}`./components/handheld`            | `xbol-app-handheld`      |
-| Documentation                           | `xbol-documents`         |
-| {doc}`./components/bastion`             | TBD                      |
+| Component                      | Repository               |
+| ------------------------------ | ------------------------ |
+| [](./components/admin-api)     | `xbol-api-admin`         |
+| [](./components/client-api)    | `xbol-api-client`        |
+| [](./components/ticketing)     | `xbol-api-ticketing`     |
+| [](./components/payments)      | `xbol-api-payments`      |
+| [](./components/identity)      | `xbol-identity-provider` |
+| [](./components/notifications) | `xbol-api-notifications` |
+| [](./components/admin-portal)  | `xbol-web-admin`         |
+| [](./components/client-web)    | `xbol-web-client`        |
+| [](./components/client-mobile) | `xbol-app-client`        |
+| [](./components/handheld)      | `xbol-app-handheld`      |
+| Documentation                  | `xbol-documents`         |
+| [](./components/bastion)       | TBD                      |
 
 ## Device Types
 
-See {doc}`./context` for device connectivity.
+See [](./context) for device connectivity.

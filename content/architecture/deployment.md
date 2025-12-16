@@ -8,60 +8,60 @@ Infrastructure deployment showing provider boundaries, technology choices, and b
 :name: fig-deployment
 :width: 100%
 
-Deployment Diagram - [View full size](/diagrams/deployment.svg)
+Deployment Diagram — [Full size](#appendix-deployment)
 ```
 
 ## Provider Boundaries
 
 ### Cloudflare
 
-| {term}`Service` | Purpose |
+| Service | Purpose |
 |-----------------|---------|
-| {term}`CDN` | Edge caching and content delivery |
-| {term}`WAF` | Request filtering and security rules |
+| CDN | Edge caching and content delivery |
+| WAF | Request filtering and security rules |
 | DDoS Protection | Traffic analysis and attack mitigation |
 
 ### AWS
 
 | Service | Purpose |
 |---------|---------|
-| {term}`VPC` | Network isolation and security boundaries |
-| {term}`Static IP` | Stable public endpoint for DNS |
-| {term}`Load Balancer` (ALB) | Traffic distribution and SSL termination |
+| VPC | Network isolation and security boundaries |
+| Static IP | Stable public endpoint for DNS |
+| Load Balancer (ALB) | Traffic distribution and SSL termination |
 | Certificate Manager | Automated SSL/TLS provisioning |
-| RDS (PostgreSQL) | Managed {term}`Database` service |
+| RDS (PostgreSQL) | Managed Database service |
 | CloudWatch | Metrics, logs, and alarms |
 
 ### On-Premise
 
-{term}`On-Premise` systems operate within the venue's local network.
+On-Premise systems operate within the venue's local network.
 
-| {term}`Component` | {term}`Platform` | Purpose |
+| Component | Platform | Purpose |
 |-------------------|------------------|---------|
-| {doc}`./components/bastion` | .NET 10 (Docker) | Offline validation and cloud sync |
-| {doc}`./components/handheld` | Android | Staff ticket scanning |
+| [](./components/bastion) | .NET 10 (Docker) | Offline validation and cloud sync |
+| [](./components/handheld) | Android | Staff ticket scanning |
 
 ## Client Platforms
 
-{term}`Client` applications run on the following platforms:
+Client applications run on the following platforms:
 
 | Client | Platforms |
 |--------|-----------|
-| {doc}`./components/client-mobile` | iOS, Android |
-| {doc}`./components/handheld` | Android only |
-| {doc}`./components/admin-portal` | Web (any browser) |
-| {doc}`./components/client-web` | Web (any browser) |
+| [](./components/client-mobile) | iOS, Android |
+| [](./components/handheld) | Android only |
+| [](./components/admin-portal) | Web (any browser) |
+| [](./components/client-web) | Web (any browser) |
 
 ## Backing Services
 
-Each {term}`Domain API` owns its backing services (database-per-service pattern):
+Each Domain API owns its backing services (database-per-service pattern):
 
-| {term}`API` | Database | {term}`Cache` | {term}`Message Broker` |
+| API | Database | Cache | Message Broker |
 |-------------|----------|---------------|------------------------|
-| {doc}`./components/ticketing` | PostgreSQL | Redis | RabbitMQ |
-| {doc}`./components/payments` | PostgreSQL | Redis | RabbitMQ |
-| {doc}`./components/identity` | PostgreSQL | Redis | - |
-| {doc}`./components/notifications` | PostgreSQL | - | RabbitMQ |
+| [](./components/ticketing) | PostgreSQL | Redis | RabbitMQ |
+| [](./components/payments) | PostgreSQL | Redis | RabbitMQ |
+| [](./components/identity) | PostgreSQL | Redis | - |
+| [](./components/notifications) | PostgreSQL | - | RabbitMQ |
 
 ## Deployment Model
 
