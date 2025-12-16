@@ -39,14 +39,12 @@ def load_mermaid_init() -> str:
     return init_block.strip() + "\n"
 
 
-def render_diagram(mmd_path: Path, svg_path: Path, init_block: str) -> bool:
-    """Render a single .mmd file to .svg with theme prepended"""
-    try:
-        from mermaid_cli import render_mermaid_file_sync
-    except ImportError:
-        print("Error: mermaid-cli not installed. Run: uv sync --extra diagrams")
-        print("Then run: uv run playwright install chromium")
-        return False
+def render_diagram(mmd_path: Path, output_dir: Path, init_block: str, formats: list[str] = None) -> bool:
+    """Render a single .mmd file to SVG and/or PNG with theme prepended"""
+    import subprocess
+
+    if formats is None:
+        formats = ["svg", "png"]
 
     # Read original content
     content = mmd_path.read_text()
@@ -63,12 +61,26 @@ def render_diagram(mmd_path: Path, svg_path: Path, init_block: str) -> bool:
         tmp_path = Path(tmp.name)
 
     try:
-        render_mermaid_file_sync(
-            input_file=str(tmp_path),
-            output_file=str(svg_path),
-            output_format="svg",
-        )
-        print(f"  {mmd_path.name} -> {svg_path.name}")
+        outputs = []
+        for fmt in formats:
+            output_path = output_dir / f"{mmd_path.stem}.{fmt}"
+            # Use scale=2 for crisp print output (PNG only)
+            cmd = [
+                "uv", "run", "mmdc",
+                "-i", str(tmp_path),
+                "-o", str(output_path),
+                "-e", fmt,
+                "-q",  # quiet
+            ]
+            if fmt == "png":
+                cmd.extend(["-s", "2"])  # 2x scale for print
+
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                print(f"  Error rendering {mmd_path.name} to {fmt}: {result.stderr}")
+                return False
+            outputs.append(output_path.name)
+        print(f"  {mmd_path.name} -> {', '.join(outputs)}")
         return True
     except Exception as e:
         print(f"  Error rendering {mmd_path.name}: {e}")
@@ -101,11 +113,10 @@ def render_all(patterns: list[str] | None = None) -> int:
         print("No .mmd files found to render")
         return 0
 
-    print(f"Rendering {len(mmd_files)} diagram(s)...")
+    print(f"Rendering {len(mmd_files)} diagram(s) to SVG + PNG...")
     success_count = 0
     for mmd_path in sorted(mmd_files):
-        svg_path = mmd_path.with_suffix(".svg")
-        if render_diagram(mmd_path, svg_path, init_block):
+        if render_diagram(mmd_path, DIAGRAMS_DIR, init_block):
             success_count += 1
 
     print(f"Done: {success_count}/{len(mmd_files)} diagrams rendered")
@@ -140,9 +151,8 @@ def watch_diagrams() -> None:
                 return
             self.last_render[path] = now
 
-            svg_path = path.with_suffix(".svg")
             print(f"\nChange detected: {path.name}")
-            render_diagram(path, svg_path, init_block)
+            render_diagram(path, DIAGRAMS_DIR, init_block)
 
     if not DIAGRAMS_DIR.exists():
         print(f"Error: {DIAGRAMS_DIR} directory not found")
