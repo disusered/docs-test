@@ -44,8 +44,8 @@ flowchart LR
 ## Cross-References
 
 Reference other documents:
-- Link to page: {doc}`./glossary`
-- Link to term: {term}`XBOL`
+- Link to page: [](./glossary)
+- Link to term: XBOL (see glossary)
 - Link to section: {ref}`glossary`
 
 ## Tables

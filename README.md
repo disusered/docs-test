@@ -10,7 +10,7 @@ uv run jupyter-book start      # Dev server at localhost:3000
 uv run jupyter-book build      # Build site
 ```
 
-## Exporting to PDF / DOCX
+## Exporting to PDF
 
 ### Prerequisites
 
@@ -34,11 +34,12 @@ winget install --id Typst.Typst
 
 ```bash
 uv run jupyter-book build --typst   # Build PDF (via Typst)
-uv run jupyter-book build --docx    # Build DOCX
 uv run jupyter-book build --all     # Build all exports
 ```
 
 Outputs are saved to `exports/`.
+
+**Note**: DOCX export is not supported for multi-article books. Individual pages can be exported to DOCX using page-level export configuration.
 
 ## Adding Content
 
@@ -113,5 +114,5 @@ Theme is auto-injected from `_terms.yml`. Commit both `.mmd` and `.svg` files.
 
 - [x] Glossary terms (Gateway, Payments, Notifications, Ticketing, Identity)
 - [ ] GitHub Actions publish to pages
-- [x] PDF / DOCX export
+- [x] PDF export (via Typst)
 - [ ] Add abstract and summary <https://mystmd.org/guide/document-parts>
