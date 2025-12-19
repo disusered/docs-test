@@ -1,0 +1,71 @@
+flowchart TB
+ subgraph Componentes["Componentes"]
+    direction TB
+        WebPortalClient["Portal Cliente<br>(Web App)"]
+        MobileAppClient["APP Movil Cliente"]
+        User(["Usuario Final"])
+        WebPortalAdmin["Portal Admin<br>(Web App)"]
+        AdminUser(["Usuario Administrativo"])
+        HandheldApp["Handheld APP"]
+        Operator(["Operador de Handheld"])
+        Identity["REST API Identity Provider (SSO)"]
+        ApiClient["REST API Cliente"]
+        ApiAdmin["REST API Admin"]
+        BD3["BD3<br>Copia BD local (Handheld)"]
+        Bastion["Bastion"]
+        BD4["BD4<br>Copia BD local (Bastion)"]
+        ApiPayments["REST API Pagos"]
+        BD1["BD1<br>Base de Datos de Boletera"]
+        BD2["BD2<br>Base de Datos de Pagos"]
+  end
+ subgraph Responsabilidades["Responsabilidades"]
+    direction TB
+        a("**Portal Cliente:** Es el sitio publico para los usuarios/clientes, donde podran ver los eventos, comprar/vender boletos, etc.")
+        b("**APP Movil Cliente:** Es la aplicacion movil para los usuarios, donde podran ver los eventos, comprar/vender boletos, mostrar su boleto, etc.")
+        c("**REST API Cliente:** Es el servicio REST API que sera consumido por el *Portal Cliente* y la *APP Movil Cliente*, este se encargara de toda la logica de negocio y permisos para ambos sitio publico y la app.")
+        d("**Portal Admin:** Es el sitio administrativo para el personal, para gestionar eventos, promociones, ventas, mapas, etc.")
+        e("**REST API Admin:** Es el servicio REST API que sera consumido por el *Portal Admin* y el *Bastion*, este se encargara de toda la logica de negocios y permisos para el sitio administrativo.")
+        f("**REST API Pagos:** Es el servicio REST API que sera consumido por el *API Cliente* y el *API Admin*, este se encargara de gestionar los pagos y toda la logica de negocios que relacionada a estos.")
+        g("**REST API Identity Provider:** Es el servicio REST API que sera consumido por todos los servicios y portal, para gestionar y validar las credenciales del usuario, asi como manterner un SSO entre los servios.")
+        h("**Handheld APP:** Es la aplicacion que se encargara de validar los boletos, guardar una bitacora y comunicarse con el bastion para sincronizar la informacion.")
+        i("**Bastion:** Este se encargara de manterner una sincronizacion entre los handheld y la BD principal de la boletera.")
+        j("**Bases de datos**<br>*BD1*: es la base de datos principal de la boletera.<br> *BD2*: es la base de datos para la gestion de pagos.<br> *BD3 y BD4*: Es la copia parcial de BD1, para el control de acceso para el evento y poder mitigar problemas de conexion.")
+  end  
+
+  Componentes -.- Responsabilidades
+
+    User ---> WebPortalClient & MobileAppClient
+    AdminUser ---> WebPortalAdmin
+    Operator ---> HandheldApp
+    WebPortalClient <---> Identity & ApiClient
+    WebPortalAdmin <---> Identity & ApiAdmin
+    MobileAppClient <---> Identity & ApiClient
+    HandheldApp <---> BD3 & Bastion
+    Bastion <---> ApiAdmin & Identity & BD4
+    ApiClient <---> ApiPayments & BD1
+    ApiAdmin <---> ApiPayments & BD1
+    ApiPayments <---> BD1 & BD2
+
+     WebPortalClient:::container
+     MobileAppClient:::container
+     User:::user
+     WebPortalAdmin:::container
+     AdminUser:::user
+     HandheldApp:::container
+     Operator:::user
+     Identity:::api
+     ApiClient:::api
+     ApiAdmin:::api
+     BD3:::db
+     Bastion:::bastion
+     BD4:::db
+     ApiPayments:::api
+     BD1:::db
+     BD2:::db
+
+    classDef user fill:#E6F7FF,stroke:#036,stroke-width:1px
+    classDef container fill:#F7F7F7,stroke:#444,stroke-width:1px
+    classDef api fill:#D5FFCC,stroke:#8FBF88,stroke-width:1px
+    classDef db fill:#FFF4E6,stroke:#C66,stroke-width:1px
+    classDef bastion fill:#FFD6D6,stroke:#CC8E8E,stroke-width:1px
+    classDef note fill:#D9D9D9,stroke:#000000,stroke-width:1px

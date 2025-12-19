@@ -1,0 +1,16 @@
+graph LR
+    browser[Navegador]
+    cdn[CDN]
+    client_api[API de Cliente]
+
+    browser --> cdn
+    browser --> client_api
+
+    %% Node styles
+    classDef clientStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef hostingStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+
+    class browser clientStyle
+    class cdn hostingStyle
+    class client_api gatewayStyle

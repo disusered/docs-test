@@ -1,0 +1,16 @@
+graph LR
+    browser[Navegador]
+    portal[Portal de Administración]
+    admin_api[API de Administración]
+
+    browser --> portal
+    portal --> admin_api
+
+    %% Node styles
+    classDef clientStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef webAppStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+
+    class browser clientStyle
+    class portal webAppStyle
+    class admin_api gatewayStyle

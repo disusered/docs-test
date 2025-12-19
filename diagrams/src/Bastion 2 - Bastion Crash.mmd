@@ -1,0 +1,76 @@
+flowchart TB
+    title[Escenario 2: Falla del Bastión - Temporal y Permanente]
+    
+    subgraph Handheld_Operation[" "]
+      direction TB
+        Start((Inicio)) --> Init["Handheld: Descargar BD local"]
+        Init --> Scan["Handheld: Escaneo QR"]
+        Scan --> IsValid{"¿Boleto Valido?"}
+	    Scan --> Log["Handheld: Guarda Bitacora en  BD local"]
+        IsValid -- NO --> Deny["⛔ ACCESO DENEGADO<br>Boleto Falso/No vendido"]
+        IsValid -- SI --> IsUsed{"¿Ya Usado?"}
+        IsUsed -- SI --> DenyDup["⛔ DENEGADO<br>Intento de Replay"]
+        IsUsed -- NO --> CheckZone{"¿Zona Correcta?"}
+        CheckZone -- NO --> WrongZone["⛔ ZONA ERRÓNEA<br>Redirigir a su puerta"]
+        CheckZone -- SI --> Grant["✅ ACCESO PERMITIDO"]
+        Log --> DoSync{"¿Sincronizar con Bastion?"}
+        Grant --> End(("Fin"))
+        DoSync -- SI --> BastionUp{¿Hay Comunicacion con Bastion?}
+        DoSync -- NO --> WaitSync["Esperar 10 seg"]
+        BastionUp -- NO --> Crash{¿Problema con Bastion?}
+        BastionUp -- SI --> Sync["Handheld: Sincronizar con Bastion"]
+        Crash -- NO --> WaitSync
+        Crash -- SI --> Recovery[IT: Recuperar Bastion]
+        WaitSync --> DoSync
+    end
+
+    subgraph Recovery_Process[Proceso Recuperar Bastion]
+      direction TB
+        RecoveryStart(("IT: <br> Recuperar Bastion")) --> OfflineMode["Handhelds entran en modo offline."]
+        OfflineMode --> Check["Revisar Bastion"]
+        Check --> Severity{¿Se puede recuperar el Bastion?}
+        Severity -- Si --> Fix["Bastion Activo"]
+        Severity -- NO --> BastionBackup{¿Hay Bastion de Reserva?}
+        BastionBackup -- SI --> DataRecovery{¿Se Pueden Recuperar la BD Local?}
+        BastionBackup -- NO <br> Falla Permanente --> WaitEnd[Esperar Fin Evento]
+        Fix --> OnlineMode["Handhelds entran en modo online"]
+        OnlineMode --> RecoveryEnd((Fin))
+        DataRecovery -- SI --> DataRestore[IT: Copia BD local al nuevo Bastion]
+        DataRecovery -- NO --> DataDownload[IT: Descarga BD local al nuevo Bastion]
+        DataRestore --> Fix
+        DataDownload --> Fix
+        WaitEnd --> ManualSync[IT: Sincroniza Handhelds de forma manual]
+        ManualSync --> NoRecovery((Fin))        
+    end
+
+     Init:::action
+     Scan:::action
+     Log:::action
+     Recovery:::action
+     OfflineMode:::error
+     Check:::action
+     Fix:::success
+     BastionUp:::logic
+     Crash:::logic
+     IsValid:::logic
+     Deny:::error
+     IsUsed:::logic
+     DenyDup:::error
+     CheckZone:::logic
+     WrongZone:::error
+     Grant:::success
+     OnlineMode:::success
+     DoSync:::logic
+     Sync:::action
+     WaitEnd:::error
+     DataRestore:::action
+     DataDownload:::action
+     ManualSync:::error
+     Severity:::logic
+     BastionBackup:::logic
+     DataRecovery:::logic
+
+    classDef success fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:2px
+    classDef error fill:#f8d7da,stroke:#dc3545,color:#721c24,stroke-width:2px
+    classDef logic fill:#fff3cd,stroke:#ffc107,color:#856404,stroke-dasharray: 5 5
+    classDef action fill:#e2e3e5,stroke:#6c757d,color:#383d41

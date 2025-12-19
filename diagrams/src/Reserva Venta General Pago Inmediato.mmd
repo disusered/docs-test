@@ -1,0 +1,60 @@
+---
+config:
+  theme: neo
+---
+sequenceDiagram
+	autonumber
+
+    actor Cliente
+	participant AdminPortal as Punto de Venta
+	participant AdminAPI as API Admin
+    participant SeatsIo
+
+	rect rgb(255, 228, 180)
+		note over Cliente,SeatsIo: VENTA EN GENERAL - COBRO INMEDIATO
+
+		Cliente ->> AdminPortal: El cliente empieza proceso de compra de boleto
+		AdminPortal ->> AdminAPI: A hace peticiones para cargar la informacion necesaria
+		AdminAPI ->> SeatsIo: Solicita la informacion de los asientos <br> await Client.Events.RetrieveObjectInfosAsync('event34', new string[] {'C-11', 'GA1'});
+		SeatsIo ->> AdminAPI: Regresa la informacion solicitada
+		AdminAPI ->> AdminAPI: Recalcula precios
+		AdminAPI ->> AdminPortal: Regresa la informacion necesaria de los asientos y precio
+		AdminPortal ->> Cliente: Se le da informacion al cliente (disponibilidad y precio)
+		Cliente ->> AdminPortal: Confirma asientos
+		AdminPortal ->> Cliente: Informa opciones de pago
+		Cliente ->> AdminPortal: Cliente confirma metodo de pago
+		AdminPortal ->> AdminAPI: Solicita reservar asientos
+		AdminAPI ->> SeatsIo: Genera llave de reserva <br> await Client.HoldTokens.CreateAsync()
+		SeatsIo ->> AdminAPI: Retorna llave de reserva <br> wvXbB9MlHt
+		AdminAPI ->> SeatsIo: Reserva los asientos con la llave de reserva <br> await Client.Events.HoldAsync('event1', new [] { 'A-3', 'A-5' }, 'wvXbB9MlHt');
+
+		alt Reserva exitosa
+			SeatsIo ->> AdminAPI: SeatsIo confirma la reserva de los asientos
+			AdminAPI ->> AdminPortal: Confirma disponibilidad de los asiento para continuar con el pago
+		else Reserva fallida
+			SeatsIo ->> AdminAPI: SeatsIo informa que los asientos ya estan reservados
+			AdminAPI ->> AdminPortal: Informa que los asientos ya no estan disponibles
+			AdminPortal ->> Cliente: Se le informa que los asientos ya no estan disponibles
+			Cliente ->> Cliente: El cliente decide si desea intentar con otros asientos o cancela el proceso
+		end
+
+		AdminPortal ->> AdminAPI: Envia informacion de pago para ser procesada
+		AdminAPI ->> AdminAPI: Procesa informacion de pago
+
+		alt Pago exitoso
+			AdminAPI ->> AdminAPI: Confirma pago exitoso
+			AdminAPI ->> SeatsIo: Actualiza el status de los asientos junto con el token de reserva <br> await Client.Events.ChangeObjectStatusAsync('event1', new [] { 'A-3', 'A-5' }, 'sold', 'wvXbB9MlHt');
+			SeatsIo --> AdminAPI: Confirma cambio de estatus
+			AdminAPI ->> AdminPortal: Confirma que el proceso fue exitoso
+			AdminPortal ->> Cliente: Muestra compra exitosa
+			AdminAPI ->> Cliente: Envia correo y entrega boleto digital
+			Cliente ->> AdminPortal: Puede pedir su boleto fisico
+			AdminPortal ->> Cliente: Entrega boleto fisico de ser necesario
+		else Reintento de pago
+			AdminAPI ->> AdminPortal: Envia mensaje de pago no procesado
+			AdminPortal ->> Cliente: Se notifica al cliente que el pago no fue procesado
+			Cliente ->> Cliente: Decide si <br>- Vuelve a intentar <br>- Elige otra forma de pago y vuelve a empiezar proceso de pago <br>- Cancela 
+		end
+	end
+
+	

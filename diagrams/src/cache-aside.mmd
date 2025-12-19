@@ -1,0 +1,17 @@
+graph LR
+    %% Define Nodes
+    App
+    Cache
+    Database
+    CacheStore["Cache Store"]
+    ReturnData["Return data"]
+
+    %% Define Relationships
+    App -- MISS --> Cache
+    Cache -- HIT --> ReturnData
+
+    %% The vertical connection between App and Database
+    App <-->|MISS| Database
+
+    %% The connection from DB to Cache Store
+    Database -- "Query DB<br/>Save copy" --> CacheStore

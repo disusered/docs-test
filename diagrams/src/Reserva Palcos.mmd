@@ -1,0 +1,47 @@
+---
+config:
+  theme: neo
+---
+sequenceDiagram
+    autonumber
+    actor Cliente
+    participant AdminPortal as Punto de Venta
+    participant AdminAPI as API Admin
+    participant SeatsIo
+
+    rect rgb(255, 235, 190)
+        note over AdminAPI, SeatsIo: RESERVA DE PARA PALCOS
+        AdminAPI ->> SeatsIo: Reserva asientos de TODOS los asientos de los palcos <br> await Client.Events.BookAsync('event1', new [] { 'A-3', 'A-5' })
+        SeatsIo ->> AdminAPI: Confirma que los asientos fueron reservados   
+    end
+
+    rect rgb(255, 250, 235)
+        note over Cliente, SeatsIo: PALCOS
+        Cliente ->> AdminPortal: El cliente empieza proceso de renovacion/venta de Palcos
+        AdminPortal ->> AdminAPI: A hace peticiones para cargar la informacion necesaria
+        AdminAPI ->> SeatsIo: Solicita la informacion de los asientos del Palco <br> await Client.Events.RetrieveObjectInfosAsync('event34', new string[] {'C-11', 'GA1'});
+        SeatsIo ->> AdminAPI: Regresa la informacion solicitada
+        AdminAPI ->> AdminAPI: Recalcula precios
+        AdminAPI ->> AdminPortal: Regresa la informacion necesaria de los asientos y precio
+        AdminPortal ->> Cliente: Se le da informacion al cliente (disponibilidad y precio)
+        Cliente ->> AdminPortal: Confirma renovacion/venta
+        AdminPortal ->> Cliente: Informa opciones de pago
+        Cliente ->> AdminPortal: Cliente confirma metodo de pago
+        AdminPortal ->> AdminAPI: Envia informacion de paga para ser procesada
+        AdminAPI ->> AdminAPI: Procesa informacion de pago
+
+        alt Pago exitoso
+            AdminAPI ->> AdminAPI: Confirma pago exitoso
+            AdminAPI ->> SeatsIo: Actualiza el status de los asientos del palco <br> await Client.Events.ChangeObjectStatusAsync('event1', new [] { 'A-3', 'A-5' }, 'Sold');
+            SeatsIo ->> AdminAPI: Confirma cambio de estatus
+            AdminAPI ->> AdminPortal: Confirma que el proceso fue exitoso
+            AdminPortal ->> Cliente: Muestra compra exitosa
+            AdminAPI ->> Cliente: Envia correo y entrega pases digital
+            Cliente ->> AdminPortal: Puede pedir su pases fisicos
+            AdminPortal ->> Cliente: Entrega pases fisicos de ser necesario
+        else Reintento de pago
+            AdminAPI ->> AdminPortal: Envia mensaje de pago no procesado
+            AdminPortal ->> Cliente: Se notifica al cliente que el pago no fue procesado
+            Cliente ->> Cliente: Decide si: <br> Vuelve a intentar <br> Elige otra forma de pago <br> o Cancela
+        end
+    end

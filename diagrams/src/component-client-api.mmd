@@ -1,0 +1,31 @@
+graph LR
+    api[API de Cliente]
+
+    subgraph backing[Servicios de Respaldo]
+        postgres[(PostgreSQL)]
+        redis[(Redis)]
+    end
+
+    subgraph domain[Domain APIs]
+        ticketing[API de Ticketing]
+        payments[API de Payments]
+        identity[API de Identity]
+        notifications[API de Notifications]
+    end
+
+    api --> postgres
+    api --> redis
+    api --> domain
+
+    %% Node styles
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+    classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+
+    class api gatewayStyle
+    class postgres,redis storageStyle
+    class ticketing,payments,identity,notifications domainStyle
+
+    %% Subgraph styling
+    style backing fill:#e0e3e4,stroke:#e0e3e4
+    style domain fill:#ffeddb,stroke:#ffeddb

@@ -1,0 +1,12 @@
+flowchart LR
+    %% Ejemplo basado en DDD (Domain driven design)
+    GW[API Gateway]
+    UM[Users Module<br/>Service]
+    BM[Billing Module<br/>Service]
+    NS[Notifications<br/>Service]
+
+    GW --> UM
+    GW --> BM
+    UM <-->|HTTP/Event| BM
+    UM --> NS
+    BM --> NS

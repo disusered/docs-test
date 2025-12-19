@@ -1,0 +1,69 @@
+graph TD
+    %% Estilos
+    classDef staff fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef system fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000;
+    classDef seats fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
+    classDef physical fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#000;
+
+    %% 1. INICIO Y SELECCIÓN
+    Start((Inicio)) --> StaffLogin[Staff: Login en sistema]
+    StaffLogin --> ShowDashboard[Sistema: Muestra Lista de Eventos]
+    %% --- BÚSQUEDA Y FILTRADO ---
+    ShowDashboard --> InputSearch[Staff: Ingresa Nombre o Categoría]
+    InputSearch --> ProcessFilter[Sistema: Filtra lista en tiempo real]
+    ProcessFilter --> CheckResult{¿Evento Encontrado?}
+    
+    %% Ciclo de búsqueda si no encuentra el evento
+    CheckResult -- No / Refinar --> InputSearch
+    
+    %% Selección del evento
+    CheckResult -- Sí --> SelectEvent[Staff: Selecciona Evento Específico]
+    SelectEvent --> RenderMap{{Seats.io: Renderiza Mapa}}
+
+    RenderMap --> PickSeat[Staff: Selecciona Asientos]
+    PickSeat --> TempBlock{{Seats.io: Bloqueo Temporal}}
+
+
+    %% 2. IDENTIFICACIÓN Y MEMBRESÍA
+    TempBlock --> AskUser[Staff: Solicita Email/Teléfono]
+    AskUser --> UserLookup{¿Sistema: Existe Usuario?}
+    
+    UserLookup -- Sí --> LoadUser[Sistema: Carga Datos y Membresía]
+    UserLookup -- No --> InputNew[Staff: Ingresa Datos Básicos]
+    
+    %% 3. DESCUENTOS Y CÁLCULO
+    LoadUser & InputNew --> AskDisc[Staff: ¿Aplicar Cupón/Descuento?]
+    AskDisc --> CheckDisc{¿Código/Membresía?}
+    
+    CheckDisc -- Sí --> ValidDisc[Sistema: Valida y Aplica Descuento]
+    CheckDisc -- No --> CalcFinal
+    
+    ValidDisc --> CalcFinal[Sistema: Calcula PRECIO FINAL]
+    
+    %% 4. PAGO Y CREACIÓN DE CUENTA
+    CalcFinal --> ShowTotal[Sistema: Muestra Total a Pagar]
+    ShowTotal --> Pay[Staff: Cobra Efectivo/Terminal]
+    Pay --> ConfirmPay[Staff: Confirma Pago en Sistema]
+    
+    ConfirmPay --> CheckNewUser{¿Era Usuario Nuevo?}
+    CheckNewUser -- Sí --> AutoCreate[Sistema: Crea Cuenta Automáticamente]
+    CheckNewUser -- No --> CallBook
+    
+    %% 5. RESERVA Y GENERACIÓN
+    AutoCreate --> CallBook{{Seats.io: Reserva Permanente}}
+    CallBook --> AskPrint{¿Cliente quiere Boleto Físico?}
+    
+    %% 6. ENTREGA Y NOTIFICACIÓN
+    
+    
+    AskPrint -- Sí --> PrintTicket[Staff: Imprime Ticket]
+    AskPrint -- No --> GenQR[Sistema: Genera QR Dinámico]
+    
+    PrintTicket --> SendNotif[Sistema: Envía Notificaciones Email/SMS/Notificación Push]
+    GenQR --> SendNotif
+    SendNotif --> End((Fin Venta))
+
+    %% Asignación de clases
+    class StaffLogin,InputSearch,SelectEvent,PickSeat,AskUser,InputNew,AskDisc,Pay,ConfirmPay,PrintTicket staff;
+    class Start,ShowDashboard,ProcessFilter,CheckResult,UserLookup,LoadUser,CheckDisc,ValidDisc,CalcFinal,ShowTotal,CheckNewUser,AutoCreate,GenQR,AskPrint,SendNotif,End system;
+    class RenderMap,TempBlock,CallBook seats;

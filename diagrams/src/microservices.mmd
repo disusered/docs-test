@@ -1,0 +1,10 @@
+flowchart LR
+    FE[FrontEnd]
+    UA[Users API<br/>Service]
+    BA[Billing API<br/>Service]
+    NS[Notifications<br/>Service]
+
+    FE --> UA
+    FE --> BA
+    UA --> NS
+    BA --> NS

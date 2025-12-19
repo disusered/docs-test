@@ -1,0 +1,26 @@
+graph LR
+    device[Dispositivo Móvil]
+    app[Cliente Móvil]
+    client_api[API de Cliente]
+
+    subgraph external[Proveedores Externos]
+        push[Proveedor de Push]
+    end
+
+    device --> app
+    app --> client_api
+    push -.->|Notificaciones| app
+
+    %% Node styles
+    classDef deviceStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef externalStyle fill:#E8E8E8,stroke:#E8E8E8,color:#333
+
+    class device deviceStyle
+    class app clientStyle
+    class client_api gatewayStyle
+    class push externalStyle
+
+    %% Subgraph styling
+    style external fill:#f5f0fa,stroke:#f5f0fa

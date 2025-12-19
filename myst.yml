@@ -1,0 +1,72 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+
+project:
+  id: ca58691d-cfc3-4cd2-8ba9-a95161b89868
+  title: Documentación XBOL
+  description: Documentación técnica para el sistema XBOL incluyendo arquitectura, diseño de base de datos y especificaciones de integración.
+  authors:
+    - name: XBOL Team
+  github:
+  toc:
+    - file: content/index.md
+    - file: content/xbol.md
+    - title: Arquitectura de Solución
+      children:
+        - file: content/architecture/index.md
+        - file: content/architecture/inventory.md
+        - file: content/architecture/context.md
+        - file: content/architecture/deployment.md
+        - file: content/architecture/scaling.md
+        - file: content/architecture/cicd.md
+        - title: Componentes
+          children:
+            - pattern: content/architecture/components/*.md
+    - title: Lineamientos y Buenas Practicas
+      children:
+        - file: content/software/dotnet-guidelines.md
+        - file: content/software/twelve-factor.md
+        - file: content/software/dotnet-best-practices.md
+        - file: content/software/react-best-practices.md
+        - file: content/software/api-documentation.md
+        - file: content/software/ai-usage.md
+    - title: Apéndices
+      children:
+        - file: content/appendices/dynamic-pricing.md
+        - title: Diagramas
+          children:
+            - file: content/appendices/diagrams/components.md
+            - file: content/appendices/diagrams/box-office.md
+            - file: content/appendices/diagrams/online-sales.md
+            - file: content/appendices/diagrams/bastion-happy-path.md
+            - file: content/appendices/diagrams/bastion-crash.md
+            - file: content/appendices/diagrams/bastion-replay.md
+            - file: content/appendices/diagrams/bastion-bottleneck.md
+            - file: content/appendices/diagrams/reservation-sale-payment-immediate.md
+            - file: content/appendices/diagrams/reservation-sale-payment-deferred.md
+            - file: content/appendices/diagrams/reservation-sale-xolospass.md
+            - file: content/appendices/diagrams/reservation-renew-xolopass.md
+            - file: content/appendices/diagrams/reservation-credit.md
+            - file: content/appendices/diagrams/reservation-suites.md
+    - file: content/glossary.md
+
+  exports:
+    - format: typst
+      output: exports/xbol.pdf
+      template: plain_typst_book
+      options:
+        logo: images/logo.png
+        logo_width: 15
+        ToC_depth: 3
+        show_pagenumber: true
+
+site:
+  # https://mystmd.org/guide/website-templates#template-site-myst-book-theme
+  template: book-theme
+  options:
+    hide_toc: false
+    hide_myst_branding: true
+    style: _static/custom.css
+    logo_text: Documentación XBOL
+  parts:
+    primary_sidebar_footer: ""

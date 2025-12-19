@@ -1,0 +1,70 @@
+flowchart TB
+    Start(["Cliente envía Solicitud"]) --> RateLimit{"¿Excede Rate Limit?"}
+    RateLimit -- Sí --> 429["Resp: 429 Too Many Requests<br>(Header: Retry-After)"]
+    RateLimit -- No --> Auth{"¿Token/API Key Válido?"}
+    Auth -- No --> RefreshToken{"¿Refresh token?"}
+    RefreshToken -- No --> 401["Resp: 401 Unauthorized"]
+    RefreshToken -- Si --> Permissions
+    Auth -- Sí --> Permissions{"¿Tiene Permisos?"}
+    Permissions -- No --> 403["Resp: 403 Forbidden"]
+    Permissions -- Sí --> Method{"¿Qué Método?"}
+    Method -- GET --> GetExists{"¿Recurso Existe?"}
+    GetExists -- No --> 404["Resp: 404 Not Found"]
+    GetExists -- Sí --> FetchData["Consultar Datos"]
+    FetchData --> 200GET["Resp: 200 OK"]
+    Method -- POST --> PostExists{"¿Recurso Existe?"}
+    PostExists -- No --> 404
+    PostExists -- Si --> SyntaxPOST{"¿Sintaxis JSON OK?"}
+    SyntaxPOST -- No --> 400["Resp: 400 Bad Request"]
+    SyntaxPOST -- Sí --> LogicPOST{"¿Datos Válidos?"}
+    LogicPOST -- No --> 422["Resp: 422 Unprocessable Entity<br>(Errores de Campos)"]
+    LogicPOST -- Sí --> CreateRes["Crear en DB"]
+    CreateRes --> DbSuccessPOST{"¿Éxito DB?"}
+    DbSuccessPOST -- Error --> 500["Resp: 500 Internal Server Error"]
+    DbSuccessPOST -- OK --> 201["Resp: 201 Created"]
+    Method -- PUT / PATCH --> PutExists{"¿Recurso Existe?"}
+    PutExists -- No --> 404
+    PutExists -- Sí --> SyntaxPUT{"¿Sintaxis JSON OK?"}
+    SyntaxPUT -- No --> 400
+    SyntaxPUT -- Sí --> LogicPUT{"¿Datos Válidos?"}
+    LogicPUT -- No --> 422
+    LogicPUT -- Sí --> UpdateRes["Actualizar DB"]
+    UpdateRes --> Conflict{"¿Conflicto Unique?"}
+    Conflict -- Sí --> 409["Resp: 409 Conflict"]
+    Conflict -- No --> 200Or204["Resp: 200 OK ó 204 No Content"]
+    Method -- DELETE --> DelExists{"¿Recurso Existe?"}
+    DelExists -- No --> 404
+    DelExists -- Sí --> DeleteRes["Eliminar de DB"]
+    DeleteRes --> 200Or204["Resp: 200 OK ó 204 No Content"]
+
+     RateLimit:::logic
+     429:::limit
+     Auth:::logic
+     RefreshToken:::logic
+     401:::clientErr
+     Permissions:::logic
+     403:::clientErr
+     Method:::logic
+     GetExists:::logic
+     404:::clientErr
+     200GET:::success
+     PostExists:::logic
+     SyntaxPOST:::logic
+     400:::clientErr
+     LogicPOST:::logic
+     422:::clientErr
+     DbSuccessPOST:::logic
+     500:::serverErr
+     201:::success
+     PutExists:::logic
+     SyntaxPUT:::logic
+     LogicPUT:::logic
+     Conflict:::logic
+     409:::clientErr
+     200Or204:::success
+     DelExists:::logic
+    classDef success fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:2px
+    classDef clientErr fill:#f8d7da,stroke:#dc3545,color:#721c24,stroke-width:2px
+    classDef serverErr fill:#f5c6cb,stroke:#dc3545,color:#721c24,stroke-width:4px
+    classDef logic fill:#fff3cd,stroke:#ffc107,color:#856404,stroke-dasharray: 5 5
+    classDef limit fill:#e2e3e5,stroke:#6c757d,color:#383d41

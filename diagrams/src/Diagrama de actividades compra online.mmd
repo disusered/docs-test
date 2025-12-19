@@ -1,0 +1,74 @@
+---
+config:
+  layout: fixed
+---
+flowchart TB
+    Start(("Inicio")) --> Visit["Usuario: Entra al sitio"]
+    Visit --> Filter["Usuario: Filtra y selecciona Evento"]
+    Filter --> RenderMap{{"Seats.io: Renderiza Mapa"}}
+    RenderMap --> PickSeat["Usuario: Selecciona Asiento"]
+    PickSeat --> TempBlock{{"Seats.io: Bloqueo Temporal"}}
+    TempBlock --> CheckAuth{"¿Sistema: Usuario Logueado?"}
+    CheckAuth -- Sí --> LoadData["Sistema: Carga Datos Usuario"]
+    CheckAuth -- No --> AskId["Usuario: Ingresa Email/Tel"]
+    AskId --> CheckExist{"¿Existe Cuenta?"}
+    CheckExist -- Sí --> DoLogin["Usuario: Ingresa Contraseña"]
+    CheckExist -- No --> DoRegister["Sistema: Registro Rápido"]
+    DoLogin --> LoadData
+    DoRegister --> LoadData
+    LoadData --> AskCode{"Usuario: ¿Ingresar Cupón?"}
+    AskCode -- Sí --> ValidateCode{"Sistema: ¿Descuento válido?"}
+    AskCode -- No --> CalcTotal["Sistema: Calcula TOTAL FINAL"]
+    ValidateCode -- Sí --> ApplyDisc["Sistema: Aplica Descuento"]
+    ValidateCode -- No --> ShowError["Sistema: Muestra Error Cupón"]
+    ShowError --> AskCode
+    ApplyDisc --> CalcTotal
+    CalcTotal --> ShowCheckout["Sistema: Muestra Resumen y Total"]
+    ShowCheckout --> InputPay["Usuario: Ingresa Datos Tarjeta"]
+    InputPay --> SendGate["Sistema: Envía a Pasarela"]
+    SendGate --> ProcessPay{{"Pasarela: Procesa Pago"}}
+    ProcessPay --> Status{"¿Aprobado?"}
+    Status -- No --> Retry{"¿Reintentar?"}
+    Retry -- Sí --> InputPay
+    Retry -- No --> Release{{"Seats.io: Liberar Asiento"}}
+    Release --> EndCancel(("Fin / Cancelado"))
+    Status -- Sí --> CallBook{{"Seats.io: Reserva Permanente"}}
+    CallBook --> GenQR["Sistema: Genera QR Dinámico"]
+    GenQR --> SendNotif["Sistema: Envía Notificaciones Email, SMS, Push"]
+    SendNotif --> ShowSuccess["Usuario: Ve Confirmación en Pantalla"]
+    ShowSuccess --> End(("Fin Exitoso"))
+
+     Start:::system
+     Visit:::user
+     Filter:::user
+     RenderMap:::seats
+     PickSeat:::user
+     TempBlock:::seats
+     CheckAuth:::system
+     LoadData:::system
+     AskId:::user
+     CheckExist:::system
+     DoLogin:::user
+     DoRegister:::system
+     AskCode:::user
+     ValidateCode:::system
+     CalcTotal:::system
+     ApplyDisc:::system
+     ShowError:::system
+     ShowCheckout:::system
+     InputPay:::user
+     SendGate:::system
+     ProcessPay:::gateway
+     Status:::gateway
+     Retry:::user
+     Release:::seats
+     EndCancel:::system
+     CallBook:::seats
+     GenQR:::system
+     SendNotif:::system
+     ShowSuccess:::user
+     End:::system
+    classDef user fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef system fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef seats fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef gateway fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#000

@@ -1,0 +1,35 @@
+flowchart TB
+    Start(("Inicio")) --> Init["Handheld: Descargar BD local"]
+    Init --> Scan["Handheld: Escaneo QR"]
+    Scan --> IsValid{"¿Boleto Valido?"}
+	Scan --> Log["Handheld: Guarda Bitacora en BD local"]
+    IsValid -- NO --> Deny["⛔ ACCESO DENEGADO<br>Boleto Falso/No vendido"]
+    IsValid -- SI --> IsUsed{"¿Ya Usado?"}
+    IsUsed -- SI --> DenyDup["⛔ DENEGADO<br>Intento de Replay"]
+    IsUsed -- NO --> CheckZone{"¿Zona Correcta?"}
+    CheckZone -- NO --> WrongZone["⛔ ZONA ERRÓNEA<br>Redirigir a su puerta"]
+    CheckZone -- SI --> Grant["✅ ACCESO PERMITIDO"]
+	Grant --> End(("Fin"))
+    Log --> DoSync{"¿Sincronizar con Bastion?"}
+    DoSync -- SI --> Sync["Handheld: Sincronizar con Bastion"]
+    DoSync -- NO --> WaitSync["Esperar 10 seg"]
+    WaitSync --> DoSync
+    title["Escenario 1: Camino Feliz"]
+
+     Log:::action
+     Init:::action
+     Scan:::action
+     IsValid:::logic
+     Deny:::error
+     IsUsed:::logic
+     DenyDup:::error
+     CheckZone:::logic
+     WrongZone:::error
+     Grant:::success
+     DoSync:::logic
+     Sync:::action
+    
+	classDef success fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:2px
+    classDef error fill:#f8d7da,stroke:#dc3545,color:#721c24,stroke-width:2px
+    classDef logic fill:#fff3cd,stroke:#ffc107,color:#856404,stroke-dasharray: 5 5
+    classDef action fill:#e2e3e5,stroke:#6c757d,color:#383d41

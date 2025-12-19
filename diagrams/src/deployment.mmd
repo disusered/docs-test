@@ -1,0 +1,113 @@
+graph TB
+    subgraph cloudflare[Cloudflare]
+        cdn[CDN]
+        waf[WAF]
+        ddos[Protección DDoS]
+    end
+
+    subgraph aws[AWS]
+        subgraph vpc[VPC]
+            static_ip[IP Estática]
+            alb[Balanceador de Carga]
+            acm[Gestor de Certificados]
+
+            subgraph compute[Computación - EC2]
+                vm[Máquina Virtual]
+
+                subgraph containers[Docker Compose]
+                    subgraph app_containers[Contenedores de Aplicación]
+                        admin_portal[Portal de Administración]
+                        client_web[Cliente Web]
+                        api_admin[API de Administración]
+                        api_client[API de Cliente]
+                        api_ticketing[API de Ticketing]
+                        api_payments[API de Payments]
+                        api_identity[API de Identity]
+                        api_notifications[API de Notifications]
+                    end
+
+                    subgraph backing_containers[Contenedores de Servicios de Respaldo]
+                        redis[(Redis)]
+                        rabbitmq>RabbitMQ]
+                    end
+                end
+            end
+
+            subgraph rds[RDS]
+                postgres[(PostgreSQL)]
+            end
+        end
+
+        cloudwatch[CloudWatch]
+    end
+
+    subgraph onprem[Instalación Local]
+        subgraph onprem_docker[Docker Compose]
+            bastion[Bastion]
+        end
+        handheld[Cliente Handheld<br/>Android]
+    end
+
+    subgraph clients[Dispositivos Cliente]
+        browser[Navegador]
+        client_mobile_ios[Cliente Móvil<br/>iOS]
+        client_mobile_android[Cliente Móvil<br/>Android]
+    end
+
+    %% Client to Cloudflare
+    browser --> cloudflare
+    client_mobile_ios --> cloudflare
+    client_mobile_android --> cloudflare
+
+    %% Cloudflare to AWS
+    cloudflare --> static_ip
+    static_ip --> alb
+    acm --> alb
+
+    %% Load Balancer routing
+    alb --> admin_portal
+    alb --> client_web
+    alb --> api_admin
+    alb --> api_client
+
+    %% App containers to backing services
+    app_containers --> postgres
+    app_containers --> redis
+    app_containers --> rabbitmq
+
+    %% AWS observability
+    vm --> cloudwatch
+
+    %% On-premise connections
+    handheld --> bastion
+    bastion --> cloudflare
+
+    %% Node styles - stroke matches fill for borderless look
+    classDef cloudflareStyle fill:#F6821F,stroke:#F6821F,color:#fff
+    classDef awsStyle fill:#FF9900,stroke:#FF9900,color:#fff
+    classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+    classDef rdsStyle fill:#3B48CC,stroke:#3B48CC,color:#fff
+
+    class cdn,waf,ddos cloudflareStyle
+    class static_ip,alb,acm,cloudwatch,vm awsStyle
+    class browser,client_mobile_ios,client_mobile_android,handheld clientStyle
+    class admin_portal,client_web,api_admin,api_client gatewayStyle
+    class bastion,api_ticketing,api_payments,api_identity,api_notifications domainStyle
+    class redis,rabbitmq storageStyle
+    class postgres rdsStyle
+
+    %% Subgraph styling - layered fills, no borders
+    style aws fill:#fff5e6,stroke:#fff5e6
+    style vpc fill:#ffefcc,stroke:#ffefcc
+    style compute fill:#ffe8b3,stroke:#ffe8b3
+    style containers fill:#ffe1a3,stroke:#ffe1a3
+    style app_containers fill:#d9f2e0,stroke:#d9f2e0
+    style backing_containers fill:#e0e3e4,stroke:#e0e3e4
+    style rds fill:#e1e3f7,stroke:#e1e3f7
+    style cloudflare fill:#fef0e6,stroke:#fef0e6
+    style onprem fill:#ebebeb,stroke:#ebebeb
+    style onprem_docker fill:#e0e0e0,stroke:#e0e0e0
+    style clients fill:#ece9fc,stroke:#ece9fc

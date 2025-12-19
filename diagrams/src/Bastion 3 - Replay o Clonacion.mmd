@@ -1,0 +1,55 @@
+flowchart TB
+  title[Escenario 3: Intento de Replay / Clonación]
+
+  Start((Inicio)) --> Init[Handhelds: Descargar BD local]
+  Init --> Scan[Handheld-1 & Handheld-2:<br>Escaneo QR]
+  Scan --> Log["Handheld-1 & Handheld-2:<br>Guarda Bitacora en BD Local"]
+  Scan --> Setting{Modo Operacion}
+
+  Setting -- Online --> IsValidOnline{Handheld-1 & Handheld-2:<br>¿Boleto Valido?}
+  IsValidOnline -- NO --> DenyOnline["Handheld-1 & Handheld-2:<br>⛔ ACCESO DENEGADO<br>Boleto Falso/No vendido"]
+  IsValidOnline -- SI --> IsUsedOnline{"Handheld-1 & Handheld-2:<br>¿Ya Usado?"}
+  IsUsedOnline -- HandHeld1:<br>NO --> CheckZoneOnline{¿Zona Correcta?}
+  IsUsedOnline -- HandHeld2:<br>SI --> DenyDupOnline["⛔ DENEGADO<br>Intento de Replay"]
+  CheckZoneOnline -- NO --> WrongZoneOnline["⛔ ZONA ERRÓNEA<br>Redirigir a su puerta"]
+  CheckZoneOnline -- SI --> GrantOnline["✅ ACCESO PERMITIDO"]
+	GrantOnline --> EndOnline(("Fin"))
+  Log --> DoSync{"¿Sincronizar con Bastion?"}
+  DoSync -- SI --> Sync["Handheld: Sincronizar con Bastion"]
+  DoSync -- NO --> WaitSync["Esperar 10 seg"]
+  WaitSync --> DoSync
+
+  Setting -- Offline --> IsValidOffline{Handheld-1 & Handheld-2:<br>¿Boleto Valido?}
+  IsValidOffline -- NO --> DenyOffline["Handheld-1 & Handheld-2:<br>⛔ ACCESO DENEGADO<br>Boleto Falso/No vendido"]
+  IsValidOffline -- SI --> IsUsedOffline{"Handheld-1 & Handheld-2:<br>¿Ya Usado?"}
+  IsUsedOffline -- NO --> CheckZoneOffline{Handheld-1 & Handheld-2:<br>¿Zona Correcta?}
+  IsUsedOffline -- SI --> DenyDupOffline["Handheld-1 & Handheld-2:<br>⛔ DENEGADO<br>Intento de Replay"]
+  CheckZoneOffline -- NO --> WrongZoneOffline["Handheld-1 & Handheld-2:<br>⛔ ZONA ERRÓNEA<br>Redirigir a su puerta"]
+  CheckZoneOffline -- SI --> GrantOffline["Handheld-1 & Handheld-2:<br>✅ ACCESO PERMITIDO"]
+	GrantOffline --> EndOffline(("Fin"))
+
+  Init:::action
+  Scan:::action  
+  Log:::action
+  Sync:::action
+  CheckZoneOnline:::logic
+  CheckZoneOffline:::logic
+  Setting:::logic
+  IsUsedOnline:::logic
+  IsUsedOffline:::logic
+  IsValidOnline:::logic
+  IsValidOffline:::logic
+  DoSync:::logic
+  DenyOnline:::error
+  DenyOffline:::error
+  DenyDupOnline:::error
+  DenyDupOffline:::error
+  WrongZoneOnline:::error
+  WrongZoneOffline:::error
+  GrantOnline:::success
+  GrantOffline:::success
+
+  classDef success fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:2px
+  classDef error fill:#f8d7da,stroke:#dc3545,color:#721c24,stroke-width:2px
+  classDef logic fill:#fff3cd,stroke:#ffc107,color:#856404,stroke-dasharray: 5 5
+  classDef action fill:#e2e3e5,stroke:#6c757d,color:#383d41

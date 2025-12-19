@@ -1,0 +1,27 @@
+graph LR
+    api[API de Ticketing]
+
+    subgraph backing[Servicios de Respaldo]
+        postgres[(PostgreSQL)]
+        redis[(Redis)]
+        rabbitmq>RabbitMQ]
+    end
+
+    seats_io[seats.io]
+
+    api --> postgres
+    api --> redis
+    api --> rabbitmq
+    api --> seats_io
+
+    %% Node styles
+    classDef apiStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+    classDef externalStyle fill:#E8E8E8,stroke:#E8E8E8,color:#333
+
+    class api apiStyle
+    class postgres,redis,rabbitmq storageStyle
+    class seats_io externalStyle
+
+    %% Subgraph styling
+    style backing fill:#e0e3e4,stroke:#e0e3e4

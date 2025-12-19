@@ -1,0 +1,35 @@
+graph LR
+    subgraph onprem[Instalación Local]
+        handheld[Cliente Handheld]
+        bastion[Bastion]
+
+        subgraph backing[Servicios de Respaldo]
+            postgres[(PostgreSQL)]
+            redis[(Redis)]
+        end
+    end
+
+    subgraph cloud[Nube]
+        admin_api[API de Administración]
+    end
+
+    handheld -->|LAN| bastion
+    bastion --> postgres
+    bastion --> redis
+    bastion -->|Internet| admin_api
+
+    %% Node styles
+    classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+
+    class handheld clientStyle
+    class bastion domainStyle
+    class postgres,redis storageStyle
+    class admin_api gatewayStyle
+
+    %% Subgraph styling
+    style onprem fill:#ebebeb,stroke:#ebebeb
+    style backing fill:#e0e3e4,stroke:#e0e3e4
+    style cloud fill:#e7f0fb,stroke:#e7f0fb

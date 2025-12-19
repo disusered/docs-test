@@ -1,0 +1,164 @@
+sequenceDiagram
+    %% PARTICIPANTS
+    actor Cliente
+    participant Taquilla as Punto de Venta (Taquilla)
+    participant Web as Sitio Web
+    participant SeatsIo
+    participant Banco as Procesador de Pago
+
+
+    %% ======================================
+    %% SECCIÓN TAQUILLA
+    %% ======================================
+    rect rgb(255, 250, 235)
+    	note over Taquilla,Cliente: ***RESERVA EN TAQUILLA***
+
+    	%% ======================
+    	%% ETAPA 1: Selección
+    	%% ======================
+    	rect rgb(255, 245, 215)
+    		note over Cliente,Taquilla: *Etapa: Selección de Asientos*
+
+    		Cliente ->> Taquilla: Se presenta en taquilla
+    		Taquilla ->> SeatsIo: Solicita asientos disponibles
+    		SeatsIo -->> Taquilla: Devuelve lista de asientos
+    		Taquilla -->> Cliente: Muestra asientos disponibles
+    		Cliente ->> Taquilla: Selecciona asientos
+    	end
+
+    	%% ======================
+    	%% ETAPA 2: Reserva
+    	%% ======================
+    	rect rgb(255, 240, 200)
+    		note over Taquilla,SeatsIo: *Etapa: Reserva de Asientos*
+
+    		loop Intento de reserva
+        		Taquilla ->> SeatsIo: Intenta reservar asientos
+        		alt Reservación exitosa
+            		SeatsIo -->> Taquilla: Asientos reservados
+        		else Asientos no disponibles
+            		SeatsIo -->> Taquilla: Reserva rechazada
+            		Taquilla ->> SeatsIo: Reintenta obtener disponibilidad
+        		end
+    		end
+		end
+    end
+
+    %% ======================
+    %% ETAPA 3: Pago
+    %% ======================
+    rect rgb(255, 235, 190)
+    	note over Cliente,Taquilla: *Etapa: Pago del Cliente*
+
+    	Taquilla -->> Cliente: Confirma disponibilidad y muestra métodos de pago
+    	Cliente ->> Taquilla: Intenta pagar
+
+    	alt Pago exitoso
+        	Taquilla ->> Taquilla: Confirma pago
+        	Taquilla ->> SeatsIo: Bloquea los asientos para venta
+        	Taquilla -->> Cliente: Entrega boleto físico
+    	else Pago fallido
+        	Taquilla -->> Cliente: Solicita otro método / reintento
+    	end
+    end
+
+    %% ======================
+    %% ETAPA 4: Liberación
+    %% ======================
+    rect rgb(255, 228, 180)
+    	note over Taquilla,SeatsIo: *Etapa: Liberación de Asientos*
+
+    	Taquilla ->> SeatsIo: Solicita liberar asientos
+    	alt Asientos liberados
+        	SeatsIo -->> Taquilla: Confirmación de liberación
+    	else No liberados
+        	SeatsIo -->> Taquilla: Serán liberados automáticamente
+    	end
+    end
+
+    %% ======================================
+    %% SECCIÓN EN LÍNEA
+    %% ======================================
+    rect rgb(235, 250, 255)
+    	note over Web,Cliente: ***RESERVA EN LÍNEA***
+
+    	%% ======================
+    	%% ETAPA 1: Selección
+    	%% ======================
+    	rect rgb(215, 240, 255)
+    		note over Cliente,Web: *Etapa: Selección de Asientos*
+
+    		Cliente ->> Web: Ingresa al sitio
+    		Web ->> SeatsIo: Solicita asientos disponibles
+    		SeatsIo -->> Web: Devuelve lista de asientos
+    		Web -->> Cliente: Muestra asientos disponibles
+    		Cliente ->> Web: Selecciona asientos
+    	end
+
+    	%% ======================
+    	%% ETAPA 2: Reserva
+    	%% ======================
+    	rect rgb(200, 230, 255)
+    		note over Web,SeatsIo: *Etapa: Reserva de Asientos*
+
+    		loop Intento de reserva
+        		Web ->> SeatsIo: Intenta reservar asientos
+        		alt Reservación exitosa
+            		SeatsIo -->> Web: Asientos reservados
+        		else Asientos no disponibles
+            		SeatsIo -->> Web: Reserva rechazada
+            		Web ->> SeatsIo: Reintenta obtener disponibilidad
+        		end
+    		end
+    	end
+
+    	%% ======================
+    	%% ETAPA 3: Pago
+    	%% ======================
+    	rect rgb(180, 220, 255)
+    		note over Cliente,Web: *Etapa: Pago del Cliente*
+
+    		Cliente ->> Web: Selecciona método de pago
+
+    		alt Pago con tarjeta
+        		Web ->> Banco: Procesar pago
+        		alt Pago exitoso
+            		Banco -->> Web: Confirmación
+            		Web ->> SeatsIo: Bloquear asientos
+            		Web -->> Cliente: Envía boleto digital
+        		else Pago fallido
+            		Banco -->> Web: Error
+            		alt Cliente desea continuar
+                		Web -->> Cliente: Reintentar
+            		else Cliente cancela
+                		Cliente ->> Web: Cancela compra
+                		Web ->> Web: Compra cancelada
+            		end
+        		end
+    		else Pago con línea de captura
+        		Cliente ->> Web: Recibe línea de pago
+
+        		loop Revisión periódica
+            		Web ->> Banco: ¿Pago confirmado?
+            			alt Pago confirmado
+                			Banco -->> Web: Confirmación
+                			Web ->> SeatsIo: Bloquear asientos
+            	    		Web -->> Cliente: Envía boleto digital
+            			else No confirmado
+                			Banco -->> Web: Pendiente
+                			Web ->> Web: Revisar vigencia del periodo
+                				alt Periodo vigente
+                    				Web ->> SeatsIo: Renovar reserva
+                				else Periodo vencido
+                    				Web ->> SeatsIo: Solicita liberar asientos
+                    					alt Liberados
+                        					SeatsIo -->> Web: Confirmación de liberación
+                    					else No liberados
+                        					SeatsIo -->> Web: Liberación automática pendiente
+                    					end
+                				end
+            			end
+        		end
+   			end
+    	end
+end

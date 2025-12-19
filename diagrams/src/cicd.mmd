@@ -1,0 +1,57 @@
+graph LR
+    subgraph dev[Desarrollo]
+        developer[Desarrollador]
+        repo[Repositorio GitHub]
+    end
+
+    subgraph actions[GitHub Actions]
+        build[Build & Test]
+        push[Push Image]
+    end
+
+    subgraph aws[AWS]
+        subgraph registry[Registro de Contenedores]
+            ecr[(ECR)]
+        end
+
+        subgraph runtime[Entorno de Ejecución]
+            secrets[Secrets Manager]
+            ec2[EC2]
+
+            subgraph containers[Docker Compose]
+                app[Contenedores de Aplicación]
+            end
+        end
+
+        cloudwatch[CloudWatch]
+    end
+
+    %% Flow
+    developer --> repo
+    repo --> build
+    build --> push
+    push --> ecr
+    ecr --> ec2
+    secrets --> ec2
+    ec2 --> containers
+    containers --> cloudwatch
+
+    %% Node styles - stroke matches fill for borderless look
+    classDef devStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef githubStyle fill:#4A90E2,stroke:#4A90E2,color:#fff
+    classDef awsStyle fill:#FF9900,stroke:#FF9900,color:#fff
+    classDef containerStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef storageStyle fill:#95a5a6,stroke:#95a5a6,color:#fff
+
+    class developer devStyle
+    class repo,build,push githubStyle
+    class ecr,secrets,cloudwatch,ec2 awsStyle
+    class app containerStyle
+
+    %% Subgraph styling - layered fills, no borders
+    style dev fill:#ece9fc,stroke:#ece9fc
+    style actions fill:#e7f0fb,stroke:#e7f0fb
+    style aws fill:#fff5e6,stroke:#fff5e6
+    style registry fill:#ffefcc,stroke:#ffefcc
+    style runtime fill:#ffe8b3,stroke:#ffe8b3
+    style containers fill:#d9f2e0,stroke:#d9f2e0

@@ -1,0 +1,73 @@
+---
+config:
+  theme: neo
+---
+sequenceDiagram
+    autonumber
+    actor Cliente
+    participant AdminPortal as Punto de Venta
+    participant AdminAPI as API Admin
+    participant SeatsIo
+
+    rect rgb(255, 228, 180)
+        note over Cliente, SeatsIo: VENTA CREDITO
+        Cliente ->> AdminPortal: El cliente empieza proceso de renovacion/venta de tickets
+        AdminPortal ->> AdminAPI: A hace peticiones para cargar la informacion necesaria
+        AdminAPI ->> SeatsIo: Solicita la informacion de los asientos <br> await Client.Events.RetrieveObjectInfosAsync('event34', new string[] {'C-11', 'GA1'});
+        SeatsIo ->> AdminAPI: Regresa la informacion solicitada
+        AdminAPI ->> AdminAPI: Recalcula precios
+        AdminAPI ->> AdminPortal: Regresa la informacion necesaria de los asientos y precio
+        AdminPortal ->> Cliente: Se le da informacion al cliente (disponibilidad y precio)
+        Cliente ->> AdminPortal: Confirma asientos
+        AdminPortal ->> Cliente: Confirma la cantidad y periodos de pago
+        Cliente ->> AdminPortal: Cliente acepta los terminos del credito
+        AdminPortal ->> AdminAPI: Solicita reservar asientos 
+        AdminAPI ->> SeatsIo: Genera llave de reserva <br> await Client.HoldTokens.CreateAsync()
+        SeatsIo ->> AdminAPI: Retorna llave de reserva <br> wvXbB9MlHt
+        AdminAPI ->> SeatsIo: Reserva los asientos con la llave de reserva <br> await Client.Events.HoldAsync('event1', new [] { 'A-3', 'A-5' }, 'wvXbB9MlHt');
+
+        alt Reserva exitosa
+            SeatsIo ->> AdminAPI: SeatsIo confirma la reserva de los asientos
+            AdminAPI ->> AdminPortal: Confirma disponibilidad de los asiento para continuar con el pago
+        else Reserva fallida
+            SeatsIo ->> AdminAPI: SeatsIo informa que los asientos ya estan reservados
+            AdminAPI ->> AdminPortal: Se informa que los asientos ya no estan disponibles
+            AdminPortal ->> Cliente: Se le informa que los asientos ya no estan disponibles
+            Cliente ->> Cliente: El cliente decide si desea intentar con otros asientos o cancela
+        end
+
+        AdminPortal ->> AdminAPI: Envia informacion del credito
+        AdminAPI ->> AdminAPI: Procesa informacion del credito
+        AdminAPI ->> AdminAPI: Confirma generacion de credito exitoso
+        AdminAPI ->> SeatsIo: Actualiza el status de los asientos junto con el token de reserva <br> await Client.Events.ChangeObjectStatusAsync('event1', new [] { 'A-3', 'A-5' }, 'sold', 'wvXbB9MlHt');
+        SeatsIo ->> AdminAPI: Confirma cambio de estatus
+        AdminAPI ->> AdminPortal: Confirma que el proceso fue exitoso
+        AdminPortal ->> Cliente: Muestra compra a credito exitosa
+        AdminAPI ->> Cliente: Envia correo y entrega ticket digital
+        Cliente ->> AdminPortal: Puede pedir su ticket fisico
+        AdminPortal ->> Cliente: Entrega ticket fisico de ser necesario
+
+        alt Abono credito confirmado
+            AdminAPI ->> AdminAPI: Recibe confirmacion de pago parcial/total y actualiza credito
+            AdminAPI ->> Cliente: Envia confirmacion de pago
+        else Abono credito no confirmado
+            AdminAPI ->> AdminAPI: Revisa pagos atrazados
+            AdminAPI ->> AdminAPI: Genera reporte de pagos atrazados
+
+            alt Cancelar Ticket 
+                AdminAPI ->> AdminAPI: Se solicita cancelar acceso
+                AdminAPI ->> SeatsIo: Actualiza estatus <br> await Client.Events.ChangeObjectStatusAsync('event1', new [] { 'A-3', 'A-5' }, 'cancelled', 'wvXbB9MlHt');
+                SeatsIo ->> AdminAPI: Confirma cancelacion
+                AdminAPI ->> Cliente: Notifica tickets no validos
+            else Inhabilitar temporalmente 
+                AdminAPI ->> AdminAPI: Se solicita inhabilitar acceso
+                AdminAPI ->> SeatsIo: Actualiza estatus <br> await Client.Events.ChangeObjectStatusAsync('event1', new [] { 'A-3', 'A-5' }, 'pending', 'wvXbB9MlHt');
+                SeatsIo ->> AdminAPI: Confirma inhabilitacion
+                AdminAPI ->> Cliente: Notifica inhabilitacion temporal
+            end
+            
+            opt No cambios
+                AdminAPI ->> Cliente: Notifica cargos/pagos pendientes
+            end
+        end
+    end

@@ -1,0 +1,30 @@
+graph LR
+    device[Dispositivo Android]
+    app[Cliente Handheld]
+
+    subgraph online[Modo Online]
+        admin_api[API de Administración]
+    end
+
+    subgraph offline[Modo Offline]
+        bastion[Bastion]
+    end
+
+    device --> app
+    app -->|Internet| admin_api
+    app -->|LAN| bastion
+
+    %% Node styles
+    classDef deviceStyle fill:#f95d6a,stroke:#f95d6a,color:#fff
+    classDef clientStyle fill:#7B68EE,stroke:#7B68EE,color:#fff
+    classDef gatewayStyle fill:#50C878,stroke:#50C878,color:#fff
+    classDef domainStyle fill:#FF9F40,stroke:#FF9F40,color:#fff
+
+    class device deviceStyle
+    class app clientStyle
+    class admin_api gatewayStyle
+    class bastion domainStyle
+
+    %% Subgraph styling
+    style online fill:#d9f2e0,stroke:#d9f2e0
+    style offline fill:#ebebeb,stroke:#ebebeb
